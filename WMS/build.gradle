@@ -1,0 +1,30 @@
+plugins {
+    id 'java'
+}
+
+group = 'wms'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.mysql:mysql-connector-j:8.0.33'
+    implementation 'org.mybatis:mybatis:3.5.6'
+    testImplementation 'org.assertj:assertj-core:3.25.3' //Test하기 위한
+    // 아래 2줄은 Lombok = 자주 쓰는 코드를 쓴다??
+    // lombok 의존 + annotationProccessor컴파일타임 코드 작성
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    //아래는 테스트 코드용 lombok
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
