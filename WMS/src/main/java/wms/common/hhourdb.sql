@@ -61,7 +61,7 @@ create table if not exists product (
                                        product_price int not null comment '상품가격',
                                        category_no int not null comment '카테고리번호',
                                        manufacturer_no int not null comment '제조사번호',
-                                       alcoholVolume double not null comment '도수',
+                                       alcohol_volume double not null comment '도수',
                                        capacity int not null comment '용량',
                                        cargo_space int not null comment '단위당 적재 면적',
                                        constraint pk_product_no primary key(product_no),
