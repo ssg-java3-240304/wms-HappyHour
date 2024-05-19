@@ -34,5 +34,6 @@
         <mapper resource="sql/category/category-mapper.xml"/>
         <mapper resource="sql/order/order-mapper.xml"/>-->
         <mapper resource="sql/delivery/delivery-mapper.xml"/>
+        <mapper resource="sql/warehouse/warehouse-mapper.xml"/>
     </mappers>
 </configuration>
