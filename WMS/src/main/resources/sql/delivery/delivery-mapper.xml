@@ -9,4 +9,12 @@
         from
             delivery_vehicle
     </select>
+    <select id="findUsableVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+        where
+            vehicle_status = #{status}
+    </select>
 </mapper>
