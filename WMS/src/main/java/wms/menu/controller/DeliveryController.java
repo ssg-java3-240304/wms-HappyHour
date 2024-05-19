@@ -1,4 +1,16 @@
 package wms.menu.controller;
 
+import wms.menu.model.dto.VehicleDto;
+import wms.menu.model.service.DeliveryService;
+import wms.menu.resultview.DeliveryResultView;
+
+import java.util.List;
+
 public class DeliveryController {
+    private DeliveryService deliveryService = new DeliveryService();
+        public void findAllVehicles() {
+        List<VehicleDto> list;
+        list = deliveryService.findAllVehicles();
+        DeliveryResultView.findAllvehicles(list);
+    }
 }
