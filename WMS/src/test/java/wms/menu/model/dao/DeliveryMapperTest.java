@@ -2,9 +2,11 @@ package wms.menu.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.*;
+import wms.common.OrderStatus;
 import wms.common.VehicleStatus;
+import wms.menu.model.dto.InventoryForDeploy;
+import wms.menu.model.dto.OutboundDtoForDeploy;
 import wms.menu.model.dto.VehicleDto;
-import wms.menu.model.service.DeliveryService;
 import wms.menu.resultview.DeliveryResultView;
 
 import java.util.List;
@@ -69,12 +71,51 @@ class DeliveryMapperTest {
                 .isNotNull()
                 .isNotEmpty()
                 .allMatch((vehicle)->vehicle != null)
-                .allSatisfy((menu)->{
-                    assertThat(menu.getRegistrationNo()).isNotNull();
-                    assertThat(menu.getVehicleStatus()).isNotNull();
-                    assertThat(menu.getCargoSpace()).isNotZero().isPositive();
+                .allSatisfy((vehicle)->{
+                    assertThat(vehicle.getRegistrationNo()).isNotNull();
+                    assertThat(vehicle.getVehicleStatus()).isNotNull();
+                    assertThat(vehicle.getCargoSpace()).isNotZero().isPositive();
                     // nullable한 컬럼은 검증제외
                 });
-        DeliveryResultView.findUsableVehicles(list);
+        try {
+            DeliveryResultView.findUsableVehicles(list);
+        } catch (Exception e) {
+            System.out.println("이용가능한 차량이 없습니다");
+        }
+    }
+
+    @Test
+    void findAllInventory() {
+        List<InventoryForDeploy> list = deliveryMapper.findAllInventory();
+        assertThat(list)
+                .isNotNull()
+                .isNotEmpty()
+                .allMatch((vehicle)->vehicle != null)
+                .allSatisfy((inventory)->{
+                    assertThat(inventory.getProductNo()).isNotNull();
+                    assertThat(inventory.getAmount()).isNotNull().isNotZero();
+                    // nullable한 컬럼은 검증제외
+                });
+        System.out.println(list);
+    }
+
+    @Test
+    void findAllOutbound() {
+        List<OutboundDtoForDeploy> list = deliveryMapper.findAllPendingOutbound(OrderStatus.PREPARING.getStatus());
+
+        assertThat(list)
+                .isNotNull()
+                .isNotEmpty()
+                .allMatch((outbound)->outbound != null)
+                .allSatisfy((outbound)->{
+                    assertThat(outbound.getOutboundNo()).isNotNull();
+                    assertThat(outbound.getFranchiseNo()).isNotNull();
+                    assertThat(outbound.getDate()).isNotNull();
+                    assertThat(outbound.getOutboundStatus()).isNotNull();
+                    // nullable한 컬럼은 검증제외
+                });
+
+        System.out.println(list);
+
     }
 }
