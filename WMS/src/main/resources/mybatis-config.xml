@@ -22,8 +22,8 @@
                 <!--                <property name="username" value="hhdb"/>-->
                 <!--                <property name="password" value="hhdb"/>-->
                 <property name="url" value="jdbc:mysql://localhost:3306/hhourdb"/>
-                <property name="username" value="root"/>
-                <property name="password" value="root"/>
+                <property name="username" value="sh"/>
+                <property name="password" value="sh"/>
             </dataSource>
         </environment>
     </environments>
@@ -33,6 +33,7 @@
         <!--<mapper resource="sql/menu/menu-mapper.xml"/>
         <mapper resource="sql/category/category-mapper.xml"/>
         <mapper resource="sql/order/order-mapper.xml"/>-->
-        <mapper resource="sql/delivery/delivery-mapper.xml"/>
+        <mapper resource="sql/inbound-mapper.xml"/>
+        <mapper resource="sql/outbound-mapper.xml"/>
     </mappers>
 </configuration>

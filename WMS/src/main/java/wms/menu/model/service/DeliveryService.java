@@ -11,24 +11,4 @@ import java.util.List;
 import static wms.common.MyBatisTemplate.getSqlSession;
 
 public class DeliveryService {
-
-    public List<VehicleDto> findAllVehicles() {
-        SqlSession sqlSession =getSqlSession();
-        DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
-        List<VehicleDto> list = deliveryMapper.findAllVehicles();
-        sqlSession.close();
-        return list;
-    }
-
-    public List<VehicleDto> findUsableVehicles() {
-        SqlSession sqlSession =getSqlSession();
-        DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
-        List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
-        sqlSession.close();
-        return list;
-    }
-
-    public DeliveryDto deploySingleVehicle() {
-
-    }
 }
