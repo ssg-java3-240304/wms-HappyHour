@@ -26,4 +26,9 @@ class DeliveryViewTest {
     void findAllVehicles() {
         deliveryView.findAllVehicles();
     }
+
+    @Test
+    void deploySingleVehicle() {
+        deliveryView.deploySingleVehicle();
+    }
 }
