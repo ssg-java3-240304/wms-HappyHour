@@ -3,9 +3,7 @@ package wms.menu.model.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,9 +11,8 @@ import java.util.Map;
 @Setter
 @ToString
 public class DeliveryDto {
-    private int dispatchNo;
-    private VehicleDto vehicleDto;
-    private LocalDateTime localDateTime;
-    private List<OutboundOrderDto> outboundList;
-    Map<Integer, Integer> productMap = new HashMap<>();
+    private int dispatchNo; //배차번호
+    private VehicleDto vehicleDto;  //차량번호
+    private LocalDateTime localDateTime;    //배차시간
+    private List<OutboundDtoForDeploy> outboundList;    //화물 목록
 }

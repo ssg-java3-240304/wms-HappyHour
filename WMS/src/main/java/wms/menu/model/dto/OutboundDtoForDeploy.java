@@ -4,6 +4,8 @@ import lombok.*;
 import wms.common.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,8 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class OutboundDtoForDeploy {
-    private int outboundNo;
-    private int franchiseNo;
-    private LocalDateTime date;
-    private String outboundStatus;
+    private int outboundNo; //수주번호
+    private int franchiseNo;    //주문점
+    private LocalDateTime date; //수주시간
+    private String outboundStatus;  //수주상태
+    private List<ProductDtoForDeploy> productList;  //상품 목록
+    private int cargoSpace; //수주의 부피
 }

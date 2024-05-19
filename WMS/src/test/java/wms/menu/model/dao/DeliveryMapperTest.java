@@ -114,8 +114,20 @@ class DeliveryMapperTest {
                     assertThat(outbound.getOutboundStatus()).isNotNull();
                     // nullable한 컬럼은 검증제외
                 });
-
+        System.out.println(list.get(0).getProductList().get(0));
+        System.out.println(list.get(0).getProductList().get(1));
+        System.out.println(list.get(0).getProductList().get(2));
+        System.out.println(list.get(0).getProductList().size());
         System.out.println(list);
+        for(OutboundDtoForDeploy element : list){
+            System.out.println("outbound_NO: " + element.getOutboundNo());
+            System.out.println(element.getProductList());
+        }
+
+    }
+
+    @Test
+    void deploySingleVehicle(){
 
     }
 }
