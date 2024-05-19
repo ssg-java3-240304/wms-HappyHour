@@ -17,4 +17,22 @@
         where
             vehicle_status = #{status}
     </select>
+    <select id="findAllInventory" resultType="InventoryForDeploy">
+        select
+            product_no,
+            sum(amount) as amount
+        from
+            inventory
+        group by
+            product_no;
+    </select>
+
+    <select id="findAllPendingOutbound" resultType="OutboundDtoForDeploy">
+        select
+            *
+        from
+            outbound
+        where
+            outbound_status = #{status}
+    </select>
 </mapper>

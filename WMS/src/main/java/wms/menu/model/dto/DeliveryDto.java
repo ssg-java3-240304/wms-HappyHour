@@ -3,6 +3,7 @@ package wms.menu.model.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,5 @@ public class DeliveryDto {
     private VehicleDto vehicleDto;
     private LocalDateTime localDateTime;
     private List<OutboundOrderDto> outboundList;
-    Map<Integer, Integer>
-
+    Map<Integer, Integer> productMap = new HashMap<>();
 }
