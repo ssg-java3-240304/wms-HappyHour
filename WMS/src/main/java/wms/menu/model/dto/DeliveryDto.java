@@ -1,7 +1,21 @@
 package wms.menu.model.dto;
 
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class DeliveryDto {
-    // 차량정보
-    // 주문 리스트 정보
-    // 피킹 리스트 정보
+    private int dispatchNo;
+    private VehicleDto vehicleDto;
+    private LocalDateTime localDateTime;
+    private List<OutboundOrderDto> outboundList;
+    Map<Integer, Integer>
+
 }

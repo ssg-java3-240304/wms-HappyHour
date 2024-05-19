@@ -19,6 +19,7 @@ drop table if exists category cascade;
 drop table if exists admin cascade;
 drop table if exists franchise cascade;
 drop table if exists delivery_vehicle cascade;
+drop table if exists delivery_dispatch_outbound cascade;
 
 -- 테이블 생성
 create table if not exists admin (
@@ -183,7 +184,7 @@ create table if not exists delivery_dispatch_product (
                                                          amount int not null comment '수량',
                                                          constraint pk_dispatch_no_product_no primary key(dispatch_no, product_no),
                                                          constraint fk_delivery_dispatch_product_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                                         constraint fk_delivery_dispatch_product_product_no foreign key (product_no) references outbound_product (product_no),
+                                                         constraint fk_delivery_dispatch_product_product_no foreign key (product_no) references product (product_no),
                                                          constraint ck_delivery_dispatch_product_amount check (amount > 0)
 ) engine=innodb comment '배차상품';
 
@@ -203,7 +204,7 @@ create table if not exists dispatch_product (
                                                 constraint pk_dispatch_no_outbound_no primary key(dispatch_no, outbound_no),
                                                 constraint fk_dispatch_product_dispatch_no foreign key (dispatch_no) references dispatch_log (dispatch_no),
                                                 constraint fk_dispatch_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
-                                                constraint fk_dispatch_product_product_no foreign key (product_no) references delivery_dispatch_product (product_no),
+                                                constraint fk_dispatch_product_product_no foreign key (product_no) references product (product_no),
                                                 constraint ck_dispatch_product_amount check (amount > 0)
 ) engine=innodb comment '출고상품';
 
@@ -224,10 +225,18 @@ create table if not exists receipt_product (
                                                constraint pk_receipt_no_inbound_no primary key(receipt_no, inbound_no),
                                                constraint fk_receipt_product_receipt_no foreign key (receipt_no) references receipt_log (receipt_no),
                                                constraint fk_receipt_product_inbound_no foreign key (inbound_no) references inbound (inbound_no),
-                                               constraint fk_receipt_product_product_no foreign key (product_no) references inbound_product (product_no),
+                                               constraint fk_receipt_product_product_no foreign key (product_no) references product (product_no),
                                                constraint ck_receipt_product_amount check (amount > 0),
                                                constraint ck_receipt_product_cargo_space check (cargo_space > 0)
 ) engine=innodb comment '입고상품';
+
+create table if not exists delivery_dispatch_outbound(
+                                            dispatch_no int comment '배차번호',
+                                            inbound_no int comment '수주번호',
+                                            constraint pk_receipt_no_inbound_no primary key(dispatch_no),
+                                            constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
+                                            constraint delivery_dispatch_outbound_inbound_no foreign key (inbound_no) references inbound (inbound_no)
+) engine=innodb comment '배차수주';
 
 -- 데이터 삽입
 insert into admin values (null, 'admin1', '1234');

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.DeliveryMapper">
+    <select id="findAllVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+    </select>
+    <select id="findUsableVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+        where
+            vehicle_status = #{status}
+    </select>
+</mapper>
