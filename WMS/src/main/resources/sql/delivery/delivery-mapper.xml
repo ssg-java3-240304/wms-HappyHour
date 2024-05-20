@@ -80,4 +80,23 @@
         )
     </insert>
 
+    <insert id = "updateDispatchOutbound" useGeneratedKeys="false" parameterType="map">
+        insert into
+            delivery_dispatch_outbound
+        values(
+            #{dispatchNo}, #{outboundNo}
+        )
+    </insert>
+
+    <update id="updateVehicleStatus" parameterType="map">
+        update
+            delivery_vehicle
+        set
+            vehicle_status = #{vehicleStatus}
+        where
+            registration_no = #{registrationNo}
+    </update>
+
+
+
 </mapper>

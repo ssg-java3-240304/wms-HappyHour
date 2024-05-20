@@ -146,4 +146,14 @@ class DeliveryMapperTest {
         list.stream().forEach(System.out::println);
 
     }
+
+    @DisplayName("수주 추가")
+    @Test
+    public void updateDispatchOutbound() {
+        //given
+//        deliveryMapper.insertDispatchOutbound(1, 9990);
+        //when
+        //then
+        deliveryMapper.updateVehicleStatus("12나 8484", VehicleStatus.DISPATCHED.getStatus());
+    }
 }

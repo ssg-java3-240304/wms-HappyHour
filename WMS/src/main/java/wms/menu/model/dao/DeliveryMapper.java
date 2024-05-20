@@ -1,5 +1,6 @@
 package wms.menu.model.dao;
 
+import org.apache.ibatis.annotations.Param;
 import wms.menu.model.dto.DeliveryDto;
 import wms.menu.model.dto.InventoryForDeploy;
 import wms.menu.model.dto.OutboundDtoForDeploy;
@@ -19,4 +20,9 @@ public interface DeliveryMapper {
     int insertDispatchLog(DeliveryDto deliveryDto);
 
     List<DeliveryDto> findDispatchLog();
+
+    int insertDispatchOutbound(@Param("dispatchNo") int dispatchNo, @Param("outboundNo") int outboundNo);
+
+
+    void updateVehicleStatus(@Param("registrationNo") String registrationNo, @Param("vehicleStatus") String status);
 }

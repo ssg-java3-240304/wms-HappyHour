@@ -59,7 +59,8 @@ public class DeliveryService {
         //배차
         deliveryDto.setOutboundList(dispatchedOutboundList);
         List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
-        deliveryDto.setVehicleDto(list.get(0));
+        VehicleDto vehicleDto = list.get(0);
+        deliveryDto.setVehicleDto(vehicleDto);
         deliveryDto.setLocalDateTime(LocalDateTime.now());
 
 //        배차가 종료됨과 동시에
@@ -68,9 +69,11 @@ public class DeliveryService {
             //배차내역 업데이트
             result = deliveryMapper.insertDispatchLog(deliveryDto);
             //차량 업데이트
-//            result = deliveryMapper.updateDispatchOutbound(deliveryDto);
-//            deliveryDto.getOutboundList()
+            deliveryMapper.updateVehicleStatus(vehicleDto.getRegistrationNo(), VehicleStatus.DISPATCHED.getStatus());
             //배차수주 업데이트
+            for(OutboundDtoForDeploy outboundDto :deliveryDto.getOutboundList()){
+                result = deliveryMapper.insertDispatchOutbound(deliveryDto.getDispatchNo(), outboundDto.getOutboundNo());
+            }
             //배차상품 업데이트
             //재고 업데이트
             //출고기록 업데이트

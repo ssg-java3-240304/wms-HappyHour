@@ -241,10 +241,10 @@ create table if not exists receipt_product (
 
 create table if not exists delivery_dispatch_outbound(
                                             dispatch_no int comment '배차번호',
-                                            inbound_no int comment '수주번호',
-                                            constraint pk_receipt_no_inbound_no primary key(dispatch_no),
+                                            outbound_no int comment '수주번호',
+                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no),
                                             constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                            constraint delivery_dispatch_outbound_inbound_no foreign key (inbound_no) references inbound (inbound_no)
+                                            constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
 ) engine=innodb comment '배차수주';
 
 -- 데이터 삽입
