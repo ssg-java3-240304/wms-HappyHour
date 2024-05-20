@@ -4,7 +4,9 @@ drop table if exists receipt_log cascade;
 drop table if exists dispatch_product cascade;
 drop table if exists dispatch_log cascade;
 drop table if exists delivery_dispatch_product cascade;
+drop table if exists delivery_dispatch_outbound cascade;
 drop table if exists delivery_dispatch_log cascade;
+drop table if exists delivery_vehicle cascade;
 drop table if exists inventory cascade;
 drop table if exists warehouse_section_space cascade;
 drop table if exists warehouse_zone cascade;
@@ -19,8 +21,6 @@ drop table if exists manufacturer cascade;
 drop table if exists category cascade;
 drop table if exists admin cascade;
 drop table if exists franchise cascade;
-drop table if exists delivery_vehicle cascade;
-drop table if exists delivery_dispatch_outbound cascade;
 
 -- 테이블 생성
 create table if not exists admin (
