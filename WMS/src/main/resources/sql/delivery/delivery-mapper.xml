@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.DeliveryMapper">
+    <select id="findAllVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+    </select>
+    <select id="findUsableVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+        where
+            vehicle_status = #{status}
+    </select>
+
+    <select id="findAllInventory" resultType="InventoryForDeploy">
+        select
+            product_no,
+            sum(amount) as amount
+        from
+            inventory
+        group by
+            product_no;
+    </select>
+
+    <select id="findAllPendingOutbound" resultMap="OutboundDtoForDeployMap">
+        select
+            *,
+            sum(b.amount * c.cargo_space) over(partition by b.outbound_no) as cargoSpace
+
+        from
+            outbound a join outbound_product b on a.outbound_no = b.outbound_no
+            join product c on b.product_no = c.product_no
+        where
+            outbound_status = #{status}
+    </select>
+
+    <resultMap id="OutboundDtoForDeployMap" type="OutboundDtoForDeploy">
+        <!-- id: PK 컬럼 매핑 -->
+        <id column="outbound_no" property="outboundNo"/>
+        <!-- result: 그 외 컬럼 매핑 -->
+        <result column="franchise_no" property="franchiseNo"/>
+        <result column="date" property="date"/>
+        <result column="outbound_status" property="outboundStatus"/>
+        <result column="cargoSpace" property="cargoSpace"/>
+        <!-- 1:N 관계의 테이블 행 매핑 -->
+        <collection property="productList" ofType="ProductDtoForDeploy">
+            <id column="product_no" property="productNo"/>
+            <result column="amount" property="amount"/>
+        </collection>
+    </resultMap>
+</mapper>

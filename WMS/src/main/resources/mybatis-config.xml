@@ -33,6 +33,6 @@
         <!--<mapper resource="sql/menu/menu-mapper.xml"/>
         <mapper resource="sql/category/category-mapper.xml"/>
         <mapper resource="sql/order/order-mapper.xml"/>-->
-        <mapper resource="sql/login-mapper.xml"/>
+        <mapper resource="sql/login/login-mapper.xml"/>
     </mappers>
 </configuration>
