@@ -5,7 +5,15 @@
 <mapper namespace="wms.menu.model.dao.ProductMapper">
     <select id="findAll" resultType="productDto">
         select
-            *
+            p.product_no,
+            product_name,
+            product_price,
+            category_no,
+            manufacturer_no,
+            alcohol_volume,
+            capacity,
+            cargo_space,
+            orderable_status
         from
             product p left join inbound_orderable ino
                 on p.product_no = ino.product_no
