@@ -5,11 +5,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Getter
-//@Setter
-//@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class DeliveryDto {
     private int dispatchNo; //배차번호
     private VehicleDto vehicleDto;  //차량번호
