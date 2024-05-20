@@ -14,18 +14,18 @@ public class ProductResultView {
         if (list.isEmpty()) {
             System.out.println("조회된 제조사 목록이 없습니다.");
         } else {
-            System.out.println("-------------------------------------------------------------------------------");
-            System.out.printf("%s %7s %40s %20s\n", "No.", "Name", "Address", "Phone");
-            System.out.println("-------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------------------");
+            System.out.printf("%s %7s %30s %30s\n", "No.", "Name", "Address", "Phone");
+            System.out.println("-------------------------------------------------------------------------------------");
             for (ManufacturerDto mDto : list) {
-                System.out.printf("%d %-9s %-50s %-20s\n",
+                System.out.printf("%-2d %-9s %-20s %20s\n",
                         mDto.getManufacturerNo(),
                         mDto.getManufacturerName(),
                         mDto.getAddress(),
                         mDto.getPhone()
                         );
             }
-            System.out.println("-------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------------------");
         }
     }
 
@@ -33,13 +33,13 @@ public class ProductResultView {
         if (list.isEmpty()) {
             System.out.println("조회된 상품 목록이 없습니다.");
         } else {
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------");
             System.out.println("                                        상품목록");
-            System.out.println("----------------------------------------------------------------------------------------------------");
-            System.out.printf("%s %7s %15s %12s %10s %10s %10s %13s %10s\n", "Pr No.", "Name", "Price", "Ct No.", "Mf No.", "alc.Vol", "Capacity", "Cargo Space", "Orderable");
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------");
+            System.out.printf("%s %7s %15s %12s %10s %9s %10s %13s %10s\n", "Pr No.", "Name", "Price", "Ct No.", "Mf No.", "alc.Vol", "Capacity", "Cargo Space", "Orderable");
+            System.out.println("------------------------------------------------------------------------------------------------------");
             for (ProductDto pDto : list) {
-                System.out.printf("%-7d %-12s %7d %10d %10d %10.1f %10d %10d %10s\n",
+                System.out.printf("%-7d %-12s %7d %10d %10d %10.1f %10d %10d %11s\n",
                         pDto.getProductNo(),
                         pDto.getProductName(),
                         pDto.getProductPrice(),
@@ -51,7 +51,7 @@ public class ProductResultView {
                         pDto.getOrderableStatus()
                 );
             }
-            System.out.println("----------------------------------------------------------------------------------------------------");
+            System.out.println("------------------------------------------------------------------------------------------------------");
         }
     }
 }

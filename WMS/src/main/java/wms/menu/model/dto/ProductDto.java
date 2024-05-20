@@ -19,9 +19,16 @@ public class ProductDto {
     private double alcoholVolume; // 도수
     private int capacity; // 용량
     private int cargoSpace; // 단위당 적재공간
-    private String orderableStatus; // 주문 가능 여부
+    private char orderableStatus; // 주문 가능 여부
+    private int inbound_quantity;
 
     public ProductDto() {
+    }
+
+    public ProductDto(int productNo, char orderableStatus, int inbound_quantity) {
+        this.productNo = productNo;
+        this.orderableStatus = orderableStatus;
+        this.inbound_quantity = inbound_quantity;
     }
 
     public ProductDto(int productNo, String productName, int productPrice, int productCategory, int manufacturerNo) {
@@ -32,7 +39,7 @@ public class ProductDto {
         this.manufacturerNo = manufacturerNo;
     }
 
-    public ProductDto(String productName, int productPrice, int productCategory, int manufacturerNo, double alcoholVolume, int capacity, int cargoSpace, String orderableStatus) {
+    public ProductDto(String productName, int productPrice, int productCategory, int manufacturerNo, double alcoholVolume, int capacity, int cargoSpace, char orderableStatus) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.categoryNo = productCategory;
@@ -43,7 +50,7 @@ public class ProductDto {
         this.orderableStatus = orderableStatus;
     }
 
-    public ProductDto(int productNo, String productName, int productPrice, int categoryNo, int manufacturerNo, double alcoholVolume, int capacity, int cargoSpace, String orderableStatus) {
+    public ProductDto(int productNo, String productName, int productPrice, int categoryNo, int manufacturerNo, double alcoholVolume, int capacity, int cargoSpace, char orderableStatus) {
         this.productNo = productNo;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -119,11 +126,19 @@ public class ProductDto {
         this.cargoSpace = cargoSpace;
     }
 
-    public String getOrderableStatus() {
+    public char getOrderableStatus() {
         return orderableStatus;
     }
 
-    public void setOrderableStatus(String orderableStatus) {
+    public int getInbound_quantity() {
+        return inbound_quantity;
+    }
+
+    public void setInbound_quantity(int inbound_quantity) {
+        this.inbound_quantity = inbound_quantity;
+    }
+
+    public void setOrderableStatus(char orderableStatus) {
         this.orderableStatus = orderableStatus;
     }
 

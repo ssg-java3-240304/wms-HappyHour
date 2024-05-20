@@ -84,4 +84,19 @@ public class ProductService {
         sqlSession.close();
         return productDto;
     }
+
+    public void insertProductToInboundOrderable(int productNo, char orderableStatus) {
+        SqlSession sqlSession = getSqlSession();
+        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+        ProductDto productDto = productMapper.insertProductToInboundOrderable(productNo, orderableStatus);
+        sqlSession.close();
+    }
+
+//    public int findProductNo(String productName) {
+//        SqlSession sqlSession = getSqlSession();
+//        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+//        int productNo = productMapper.findProductNo(productName);
+//        sqlSession.close();
+//        return productNo;
+//    }
 }

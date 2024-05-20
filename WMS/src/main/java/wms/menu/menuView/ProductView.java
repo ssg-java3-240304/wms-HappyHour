@@ -156,7 +156,7 @@ public class ProductView {
 //        System.out.print("> 상품 카테고리 : ");
 //        int productCategory = sc.nextInt();
         // 제조사 전체 조회
-        displayManufacturerList();
+//        displayManufacturerList();
         // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
         List<ManufacturerDto> manufacturerFindAll = productController.findManufacturers();
         int manufacturer;
@@ -181,7 +181,7 @@ public class ProductView {
         System.out.print("> 적재공간 : ");
         int cargoSpace = sc.nextInt();
         System.out.print("> 주문 가능 여부(Y/N) : ");
-        String orderableStatus = sc.next();
+        char orderableStatus = sc.next().toUpperCase().charAt(0);
         return new ProductDto(productName, productPrice, categoryNo, manufacturer, alcoholVolume, capacity, cargoSpace, orderableStatus);
     }
 

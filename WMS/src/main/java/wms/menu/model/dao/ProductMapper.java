@@ -25,4 +25,8 @@ public interface ProductMapper {
 
     // 상품 수정
     int updateProduct(ProductDto productDto);
+
+    ProductDto insertProductToInboundOrderable(int productNo, char orderableStatus);
+
+//    int findProductNo(String productName);
 }
