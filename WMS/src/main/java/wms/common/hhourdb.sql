@@ -61,7 +61,7 @@ create table if not exists product (
                                        product_price int not null comment '상품가격',
                                        category_no int not null comment '카테고리번호',
                                        manufacturer_no int not null comment '제조사번호',
-                                       alcoholVolume double not null comment '도수',
+                                       alcohol_volume double not null comment '도수',
                                        capacity int not null comment '용량',
                                        cargo_space int not null comment '단위당 적재 면적',
                                        constraint pk_product_no primary key(product_no),
@@ -311,7 +311,7 @@ insert into inbound_product values (1112, 60006, 250);
 insert into inbound_product values (1112, 60007, 369);
 
 insert into outbound values (null, 2, '2024-05-12 14:38:07', 'completed');
-insert into outbound values (null, 3, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 1, '2024-05-14 08:49:12', 'preparing');
 insert into outbound values (null, 1, '2024-05-15 19:21:23', 'canceled');
 
 insert into outbound_product values (9990, 60003, 234);

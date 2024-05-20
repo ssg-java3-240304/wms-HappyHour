@@ -33,7 +33,7 @@
         <!--<mapper resource="sql/menu/menu-mapper.xml"/>
         <mapper resource="sql/category/category-mapper.xml"/>
         <mapper resource="sql/order/order-mapper.xml"/>-->
-        <mapper resource="sql/inbound-mapper.xml"/>
-        <mapper resource="sql/outbound-mapper.xml"/>
+        <mapper resource="sql/inoutbound/inbound-mapper.xml"/>
+        <mapper resource="sql/inoutbound/outbound-mapper.xml"/>
     </mappers>
 </configuration>
