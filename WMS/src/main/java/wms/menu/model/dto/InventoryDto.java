@@ -1,11 +1,21 @@
 package wms.menu.model.dto;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class InventoryDto {
-    private int inventoryNo;
+    private int sectionNo;
     private int productNo;
     private int amount;
 
-    private List<ProductDto> productList;
+    // 구역명
+    private String sectionName;
+    // 상품명
+    private String productName;
+    // 상품의 적재 공간
+    private int cargoSpace;
 }

@@ -50,13 +50,13 @@ public class DeliveryService {
         DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
         DeliveryDto deliveryDto = new DeliveryDto();
 
-//        전체 재고 목록 받아옴
-        List<InventoryForDeploy> inventoryList = deliveryMapper.findAllInventory();
+//        상품별 전체 재고 목록 받아옴
+        List<InventoryForDeploy> totalInventoryList = deliveryMapper.findAllInventory();
 
 //        수주목록 받아옴
         List<OutboundDtoForDeploy> outboundFullList = deliveryMapper.findAllPendingOutbound(OrderStatus.PREPARING.getStatus());
 //        재고 내에서 추가 가능한 상품을 추가함
-        List<OutboundDtoForDeploy> dispatchedOutboundList = payloadOutbound(inventoryList, outboundFullList, vehicleCapacity);
+        List<OutboundDtoForDeploy> dispatchedOutboundList = payloadOutbound(totalInventoryList, outboundFullList, vehicleCapacity);
         //배차
         deliveryDto.setOutboundList(dispatchedOutboundList);
         List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
@@ -70,26 +70,50 @@ public class DeliveryService {
             //배차내역 업데이트
             result = deliveryMapper.insertDispatchLog(deliveryDto);
             //차량 업데이트
+            deliveryDto.getVehicleDto().setVehicleStatus(VehicleStatus.DISPATCHED.getStatus());
             deliveryMapper.updateVehicleStatus(vehicleDto.getRegistrationNo(), VehicleStatus.DISPATCHED.getStatus());
 
             //배차수주 업데이트
             for(OutboundDtoForDeploy outboundDto :deliveryDto.getOutboundList()){
                 //배차수주 테이블 업데이트
+                System.out.println("dispatchNo : " + deliveryDto.getDispatchNo());
                 result = deliveryMapper.insertDispatchOutbound(deliveryDto.getDispatchNo(), outboundDto.getOutboundNo());
             }
 
             //배차상품 업데이트 //delivery_dispatch_product dispatch_no, product_no, amount
-            //배차상품 테이블 업데이트
-            for(Map.Entry<Integer, Integer> entry : insertDispatchProduct(deliveryDto).entrySet()){
-                deliveryMapper.insertDispatchProduct(deliveryDto.getDispatchNo(), entry.getKey(), entry.getValue());
+            //배차상품 테이블 업데이트 //동시에 재고를 감소
+            Map<Integer, Integer> productAmountMap = getDispatchProductMap(deliveryDto);
+
+            for(Map.Entry<Integer, Integer> entry : productAmountMap.entrySet()){
+                deliveryMapper.insertDispatchProduct(deliveryDto.getDispatchNo(), entry.getKey(), entry.getValue());    //배차 상품 추가
             }
 
+            //배차 상품 맵을 리스트로 변환
+            List<Integer> productKeyList = productAmountMap.keySet().stream().toList();
+            //재고 조회
+            List<InventoryDto> inventoryList = deliveryMapper.findInventoryByProductNo(productKeyList);
+
+            DispatchDto dispatchDto = new DispatchDto();
+            dispatchDto.setDispatchNo();
+            dispatchDto.setDate();
+            dispatchDto.setProductName();
+            dispatchDto.setAmount();
+            dispatchDto.setSectionNo();
+
+            //재고 감소 처리
+            getDispatchedInventory(inventoryList, productAmountMap);
             //재고 업데이트
+            deliveryMapper.dispatchInventory(inventoryList);
+
             //출고기록 업데이트
+
             //출고상품 업데이트
+
             sqlSession.commit();
+
         } catch (RuntimeException e) {
             sqlSession.rollback();
+            e.printStackTrace();
         }finally {
             sqlSession.close();
         }
@@ -140,7 +164,7 @@ public class DeliveryService {
     }
 
     //배차 상품 삽입
-    private Map<Integer, Integer> insertDispatchProduct(DeliveryDto deliveryDto){
+    private Map<Integer, Integer> getDispatchProductMap(DeliveryDto deliveryDto){
         Map<Integer, Integer> productMap = new HashMap<>();
 
         for(OutboundDtoForDeploy outboundDto : deliveryDto.getOutboundList()){
@@ -150,5 +174,24 @@ public class DeliveryService {
             }
         }
         return productMap;
+    }
+
+    private List<InventoryDto> getDispatchedInventory(List<InventoryDto> inventoryList, Map<Integer, Integer> productAmountMap){
+        //            각 재고마다 해쉬 맵을 검사하여 해쉬 맵에 값이 있으면 스스로의 재고를 감소
+        for(InventoryDto inventory : inventoryList){
+            int productNo = inventory.getProductNo();
+            int productAmount = inventory.getAmount();
+            if(0 == productAmountMap.get(productNo))
+                continue;
+            if(productAmountMap.get(productNo) <= productAmount){
+                productAmount = productAmount - productAmountMap.get(productNo);
+                productAmountMap.put(productNo, 0);
+            }else{
+                productAmountMap.put(productNo, productAmountMap.get(productNo) - productAmount);
+                productAmount = 0;
+            }
+            inventory.setAmount(productAmount);
+        }
+        return inventoryList;
     }
 }

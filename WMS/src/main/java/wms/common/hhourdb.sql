@@ -167,7 +167,7 @@ create table if not exists inventory (
                                          constraint pk_section_no_product_no primary key(section_no, product_no),
                                          constraint fk_inventory_section_no foreign key (section_no) references warehouse_section (section_no),
                                          constraint fk_inventory_product_no foreign key (product_no) references product (product_no),
-                                         constraint ck_inventory_amount check (amount > 0)
+                                         constraint ck_inventory_amount check (amount >= 0)
 ) engine=innodb comment '재고';
 
 create table if not exists delivery_vehicle (
@@ -242,7 +242,7 @@ create table if not exists receipt_product (
 create table if not exists delivery_dispatch_outbound(
                                             dispatch_no int comment '배차번호',
                                             outbound_no int comment '수주번호',
-                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no),
+                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no, outbound_no),
                                             constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
                                             constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
 ) engine=innodb comment '배차수주';
@@ -322,12 +322,15 @@ insert into inbound_product values (1112, 60007, 369);
 insert into outbound values (null, 2, '2024-05-12 14:38:07', 'completed');
 insert into outbound values (null, 1, '2024-05-14 08:49:12', 'preparing');
 insert into outbound values (null, 1, '2024-05-15 19:21:23', 'canceled');
+insert into outbound values (null, 2, '2024-05-15 19:21:24', 'preparing');
 
 insert into outbound_product values (9990, 60003, 234);
 insert into outbound_product values (9991, 60014, 65);
 insert into outbound_product values (9991, 60018, 20);
 insert into outbound_product values (9992, 60007, 63);
 insert into outbound_product values (9992, 60019, 80);
+insert into outbound_product values (9993, 60003, 10);
+insert into outbound_product values (9993, 60005, 10);
 
 insert into warehouse_section values (null, '소주 창고', 1);
 insert into warehouse_section values (null, '맥주 창고', 2);

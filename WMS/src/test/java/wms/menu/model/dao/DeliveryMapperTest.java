@@ -4,13 +4,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.*;
 import wms.common.OrderStatus;
 import wms.common.VehicleStatus;
-import wms.menu.model.dto.DeliveryDto;
-import wms.menu.model.dto.InventoryForDeploy;
-import wms.menu.model.dto.OutboundDtoForDeploy;
-import wms.menu.model.dto.VehicleDto;
+import wms.menu.model.dto.*;
 import wms.menu.resultview.DeliveryResultView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -165,5 +163,30 @@ class DeliveryMapperTest {
 //        deliveryMapper.insertDispatchProduct();
         //then
 
+    }
+
+    @Test
+    void inventoryByProductNo() {
+        List<Integer> list = List.of(60001, 60002, 60003);
+        deliveryMapper.findInventoryByProductNo(list).forEach(System.out::println);
+
+    }
+
+    @Test
+    void updateInventoryTest() {
+        List<InventoryDto> list = new ArrayList<>();
+        list.add(new InventoryDto(501, 60001, 35,"","",0));
+        list.add(new InventoryDto(500, 60003, 100,"","",0));
+        list.add(new InventoryDto(500, 60004, 60,"","",0));
+        deliveryMapper.dispatchInventory(list);
+
+        List<Integer> prodNo = new ArrayList<>();
+        prodNo.add(60003);
+        prodNo.add(60001);
+        List<InventoryDto> inv = deliveryMapper.findInventoryByProductNo(prodNo);
+        int k = 0;
+        System.out.println("result = " + inv.get(k).getSectionNo()+" , " +inv.get(k).getProductNo() +" , "+ inv.get(k).getAmount());
+        k = 1;
+        System.out.println("result = " + inv.get(k).getSectionNo()+" , " +inv.get(k).getProductNo() +" , "+ inv.get(k).getAmount());
     }
 }

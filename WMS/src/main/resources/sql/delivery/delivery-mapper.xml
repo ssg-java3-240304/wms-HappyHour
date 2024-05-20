@@ -80,7 +80,7 @@
         )
     </insert>
 
-    <insert id = "updateDispatchOutbound" useGeneratedKeys="false" parameterType="map">
+    <insert id = "insertDispatchOutbound" useGeneratedKeys="false" parameterType="map">
         insert into
             delivery_dispatch_outbound
         values(
@@ -105,5 +105,25 @@
         )
     </insert>
 
+    <select id="findInventoryByProductNo" parameterType="java.util.List" resultType="InventoryDto">
+        SELECT
+            *
+        FROM
+            inventory
+        WHERE
+            product_no IN
+        <foreach item="key" collection="list" open="(" separator="," close=")">
+            #{key}
+        </foreach>
+    </select>
+
+
+    <update id="dispatchInventory" parameterType="java.util.List">
+        <foreach item="inventory" collection="list" separator=";">
+            UPDATE inventory
+            SET amount = #{inventory.amount}
+            WHERE section_no = #{inventory.sectionNo} and product_no = #{inventory.productNo}
+        </foreach>
+    </update>
 
 </mapper>
