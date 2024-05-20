@@ -2,6 +2,32 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper>
-
+<mapper namespace="wms.menu.model.dao.InventoryMapper">
+    <!-- 쿼리문 -->
+    <!-- 구역 기준 정렬 -->
+    <select id="orderBySection" resultType="InventoryDto">
+        select section_no,
+               product_no,
+               amount,
+               ws.section_name as 'section_name',
+               p.product_name as 'product_name',
+               p.cargo_space as 'cargo_space'
+        from inventory i
+                left join warehouse_section ws using (section_no)
+                left join product p using (product_no)
+        order by section_no
+    </select>
+    <!-- 상품 기준 정렬 -->
+    <select id="orderByProduct" resultType="InventoryDto">
+        select section_no,
+               product_no,
+               amount,
+               ws.section_name as 'section_name',
+               p.product_name as 'product_name',
+               p.cargo_space as 'cargo_space'
+        from inventory i
+                left join warehouse_section ws using (section_no)
+                left join product p using (product_no)
+        order by product_no
+    </select>
 </mapper>

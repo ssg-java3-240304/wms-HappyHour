@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class InventoryView {
     // 재고관리 뷰
+
     /**
      * 1. 재고 보기 형식
      * 2. 재고 목록
@@ -14,6 +15,7 @@ public class InventoryView {
     public static void main(String[] args) {
         new InventoryView().inventoryMenu();
     }
+
     private InventoryController inventoryController = new InventoryController();
     private Scanner sc = new Scanner(System.in);
 
@@ -24,11 +26,12 @@ public class InventoryView {
                 0. 나가기
                 원하시는 메뉴는 선택해주세요.""";
         while (true) {
-            findBySection();
+            orderBySection();
             System.out.println(menu);
             String choice = sc.nextLine();
             switch (choice) {
-//                case "1" ->
+                case "1" -> sortInventory();
+                case "2" -> moveInventory();
                 case "0" -> {
                     return;
                 }
@@ -43,15 +46,36 @@ public class InventoryView {
                 원하시는 정렬 기준을 선택해주세요.
                 1. 창고
                 2. 상품 카테고리
-                0. 취소
-                """;
+                0. 취소""";
+        System.out.println(menu);
+        String choice = sc.nextLine();
+        while (true) {
+            switch (choice) {
+                case "1" -> {
+                    orderBySection();
+                    return;
+                }
+                case "2" -> {
+                    orderByProduct();
+                    return;
+                }
+                case "0" -> {
+                    return;
+                }
+                default -> System.out.println("잘 못 입력하셨습니다. 다시 입력해주세요.");
+            }
+        }
     }
 
-    private void findByCategory() {
-
+    private void orderBySection() {
+        inventoryController.orderBySection();
     }
 
-    private void findBySection() {
+    private void orderByProduct() {
+        inventoryController.orderByProduct();
+    }
+
+    private void moveInventory() {
 
     }
 }
