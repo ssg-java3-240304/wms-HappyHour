@@ -14,7 +14,6 @@ import java.util.List;
 import static wms.common.MyBatisTemplate.getSqlSession;
 
 public class DeliveryService {
-
     public List<VehicleDto> findAllVehicles() {
         SqlSession sqlSession =getSqlSession();
         DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
@@ -27,6 +26,14 @@ public class DeliveryService {
         SqlSession sqlSession =getSqlSession();
         DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
         List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
+        sqlSession.close();
+        return list;
+    }
+
+    public List<DeliveryDto> findDispatchLog(){
+        SqlSession sqlSession =getSqlSession();
+        DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
+        List<DeliveryDto> list = deliveryMapper.findDispatchLog();
         sqlSession.close();
         return list;
     }
@@ -53,11 +60,24 @@ public class DeliveryService {
         List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
         deliveryDto.setVehicleDto(list.get(0));
         deliveryDto.setLocalDateTime(LocalDateTime.now());
+
 //        배차가 종료됨과 동시에
-//        출고, 재고 업데이트
-
-//        배차내역, 차량, 배차수주, 배차상품 업데이트
-
+        try {
+            int result;
+            //배차내역 업데이트
+            result = deliveryMapper.insertDispatchLog(deliveryDto);
+            //차량 업데이트
+            //배차수주 업데이트
+            //배차상품 업데이트
+            //재고 업데이트
+            //출고기록 업데이트
+            //출고상품 업데이트
+            sqlSession.commit();
+        } catch (RuntimeException e) {
+            sqlSession.rollback();
+        }finally {
+            sqlSession.close();
+        }
 //        배차Dto 반환
 
         return deliveryDto;
@@ -92,7 +112,7 @@ public class DeliveryService {
                 }
             }
 
-            //재고가 충분하면 진행 //재고를 감소
+            //재고가 충분하면 진행 //사용가능한 재고를 감소
             for(ProductDtoForDeploy productDto : outboundDto.getProductList()){
                 int amount = inventoryHashMap.get(productDto.getProductNo()) - productDto.getAmount();
                 inventoryHashMap.put(productDto.getProductNo(), amount);
@@ -103,5 +123,4 @@ public class DeliveryService {
         }
         return resultList;
     }
-
 }
