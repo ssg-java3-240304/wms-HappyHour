@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.LoginMapper">
+    <select id="checkId" resultType="String">
+        select
+        admin_id
+        from
+        admin
+        where
+        admin_id = #{id}
+    </select>
+    <select id="checkPw" resultType="String">
+        select
+        admin_pw
+        from
+        admin
+        where
+        admin_id = #{id}
+    </select>
+</mapper>

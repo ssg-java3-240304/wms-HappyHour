@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.InOutboundMapper">
+    <select id="findDispatchLog" resultType="DispatchDto">
+        select
+        dispatch_product.dispatch_no,
+        date,
+        product_name,
+        dispatch_product.amount,
+        section_no
+        from
+        dispatch_log join dispatch_product
+        on dispatch_log.dispatch_no = dispatch_product.dispatch_no
+        join product
+        on dispatch_product.product_no = product.product_no
+        join inventory
+        on dispatch_product.product_no = inventory.product_no
+    </select>
+</mapper>
