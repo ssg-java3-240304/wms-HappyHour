@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.WarehouseMapper">
+    <resultMap id="WarehouseSectionDtoMap" type="WarehouseSectionDto">
+        <id column="section_no" property="sectionNo"/>
+        <result column="section_name" property="sectionName"/>
+        <result column="category_no" property="categoryNo"/>
+        <collection property="sectionSpaceList" ofType="warehouseSectionSpaceDto">
+            <id column="section_no" property="sectionNo"/>
+            <id column="zone_no" property="zoneNo"/>
+            <association property="zoneList" javaType="warehouseZoneDto">
+                <id column="zone_no" property="zoneNo"/>
+                <result column="zone_name" property="zoneName"/>
+                <result column="zone_space" property="zoneSpace"/>
+            </association>
+        </collection>
+    </resultMap>
+    <!-- 창고 구역 조회 -->
+    <select id="findAllSection" resultMap="WarehouseSectionDtoMap">
+        select *
+        from warehouse_section s
+                left join warehouse_section_space sp using (section_no)
+                left join warehouse_zone z using (zone_no)
+        order by s.section_no
+    </select>
+
+</mapper>
