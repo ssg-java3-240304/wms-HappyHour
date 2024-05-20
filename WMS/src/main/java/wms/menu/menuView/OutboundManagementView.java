@@ -28,7 +28,7 @@ public class OutboundManagementView {
             sc.nextLine(); // 입력 버퍼 비우기
             switch (choice) {
                 case 1:
-                    //showOrderSummary();
+                    showOrderSummary();
                     break;
                 case 0:
                     return;

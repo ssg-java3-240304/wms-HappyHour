@@ -1,4 +1,4 @@
-package wms.menu.menuView;
+package wms.menu.controller;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OutboundManagementViewTest {
+class OutboundManagementControllerTest {
+    OutboundManagementController outboundManagementController = new OutboundManagementController();
 
-    OutboundManagementView outboundManagementView = new OutboundManagementView();
     @BeforeEach
     void setUp() {
     }
@@ -18,9 +18,8 @@ class OutboundManagementViewTest {
     }
 
     @Test
-    void OutBoundMangementView() {
-
-        outboundManagementView.outboundManagementMenu();
+    void name() {
+        outboundManagementController.getAllOrders();
 
     }
 }
