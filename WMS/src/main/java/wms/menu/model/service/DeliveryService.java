@@ -67,6 +67,7 @@ public class DeliveryService {
             //배차내역 업데이트
             result = deliveryMapper.insertDispatchLog(deliveryDto);
             //차량 업데이트
+//            result = deliveryMapper
             //배차수주 업데이트
             //배차상품 업데이트
             //재고 업데이트
