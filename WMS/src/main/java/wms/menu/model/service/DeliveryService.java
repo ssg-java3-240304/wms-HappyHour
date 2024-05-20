@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static wms.common.MyBatisTemplate.getSqlSession;
 
@@ -70,11 +71,19 @@ public class DeliveryService {
             result = deliveryMapper.insertDispatchLog(deliveryDto);
             //차량 업데이트
             deliveryMapper.updateVehicleStatus(vehicleDto.getRegistrationNo(), VehicleStatus.DISPATCHED.getStatus());
+
             //배차수주 업데이트
             for(OutboundDtoForDeploy outboundDto :deliveryDto.getOutboundList()){
+                //배차수주 테이블 업데이트
                 result = deliveryMapper.insertDispatchOutbound(deliveryDto.getDispatchNo(), outboundDto.getOutboundNo());
             }
-            //배차상품 업데이트
+
+            //배차상품 업데이트 //delivery_dispatch_product dispatch_no, product_no, amount
+            //배차상품 테이블 업데이트
+            for(Map.Entry<Integer, Integer> entry : insertDispatchProduct(deliveryDto).entrySet()){
+                deliveryMapper.insertDispatchProduct(deliveryDto.getDispatchNo(), entry.getKey(), entry.getValue());
+            }
+
             //재고 업데이트
             //출고기록 업데이트
             //출고상품 업데이트
@@ -128,5 +137,18 @@ public class DeliveryService {
             payload = payload + outboundDto.getCargoSpace();
         }
         return resultList;
+    }
+
+    //배차 상품 삽입
+    private Map<Integer, Integer> insertDispatchProduct(DeliveryDto deliveryDto){
+        Map<Integer, Integer> productMap = new HashMap<>();
+
+        for(OutboundDtoForDeploy outboundDto : deliveryDto.getOutboundList()){
+            for(ProductDtoForDeploy productDto : outboundDto.getProductList()){
+                productMap.compute(productDto.getProductNo(),
+                        (k, v) -> (v == null) ? productDto.getAmount() : v + productDto.getAmount() );
+            }
+        }
+        return productMap;
     }
 }

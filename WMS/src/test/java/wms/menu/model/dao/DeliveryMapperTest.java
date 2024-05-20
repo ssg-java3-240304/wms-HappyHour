@@ -156,4 +156,14 @@ class DeliveryMapperTest {
         //then
         deliveryMapper.updateVehicleStatus("12나 8484", VehicleStatus.DISPATCHED.getStatus());
     }
+
+    @DisplayName("배차상품 추가")
+    @Test
+    public void dispatchProductTest() {
+        //given
+        //when
+//        deliveryMapper.insertDispatchProduct();
+        //then
+
+    }
 }

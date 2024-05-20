@@ -25,4 +25,6 @@ public interface DeliveryMapper {
 
 
     void updateVehicleStatus(@Param("registrationNo") String registrationNo, @Param("vehicleStatus") String status);
+
+    void insertDispatchProduct(@Param("dispatchNo")int dispatchNo, @Param("productNo") Integer productNo, @Param("productNo") Integer amount);
 }

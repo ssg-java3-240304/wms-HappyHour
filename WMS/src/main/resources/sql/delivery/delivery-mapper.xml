@@ -97,6 +97,13 @@
             registration_no = #{registrationNo}
     </update>
 
+    <insert id = "insertDispatchProduct" useGeneratedKeys="false" parameterType="map">
+        insert into
+            delivery_dispatch_product
+        values(
+            #{dispatchNo}, #{productNo}, #{amount}
+        )
+    </insert>
 
 
 </mapper>
