@@ -17,4 +17,67 @@
         where
             vehicle_status = #{status}
     </select>
+
+    <select id="findAllInventory" resultType="InventoryForDeploy">
+        select
+            product_no,
+            sum(amount) as amount
+        from
+            inventory
+        group by
+            product_no;
+    </select>
+
+
+    <select id="findDispatchLog" resultMap="DeliveryDtoMap">
+        select
+            *
+        from
+            delivery_dispatch_log
+    </select>
+    <resultMap id="DeliveryDtoMap" type="DeliveryDto">
+        <id column = "dispatch_no" property="dispatchNo"/>
+        <result column="date" property="localDateTime"/>
+        <association property="vehicleDto" javaType="VehicleDto">
+            <id column="registration_no" property="registrationNo"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findAllPendingOutbound" resultMap="OutboundDtoForDeployMap">
+        select
+            *,
+            sum(b.amount * c.cargo_space) over(partition by b.outbound_no) as cargoSpace
+
+        from
+            outbound a join outbound_product b on a.outbound_no = b.outbound_no
+            join product c on b.product_no = c.product_no
+        where
+            outbound_status = #{status}
+    </select>
+
+    <resultMap id="OutboundDtoForDeployMap" type="OutboundDtoForDeploy">
+        <!-- id: PK 컬럼 매핑 -->
+        <id column="outbound_no" property="outboundNo"/>
+        <!-- result: 그 외 컬럼 매핑 -->
+        <result column="franchise_no" property="franchiseNo"/>
+        <result column="date" property="date"/>
+        <result column="outbound_status" property="outboundStatus"/>
+        <result column="cargoSpace" property="cargoSpace"/>
+        <!-- 1:N 관계의 테이블 행 매핑 -->
+        <collection property="productList" ofType="ProductDtoForDeploy">
+            <id column="product_no" property="productNo"/>
+<!--            <id column="outbound_no" property="outboundNo"/>-->
+            <result column="amount" property="amount"/>
+        </collection>
+    </resultMap>
+
+    <insert id = "insertDispatchLog" useGeneratedKeys="true" keyProperty="dispatchNo">
+        insert into
+        delivery_dispatch_log
+        values(
+        null, #{vehicleDto.registrationNo}, #{localDateTime}
+        )
+    </insert>
+
 </mapper>
