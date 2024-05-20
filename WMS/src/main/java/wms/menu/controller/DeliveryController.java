@@ -8,6 +8,7 @@ import wms.menu.resultview.DeliveryResultView;
 import java.util.List;
 
 public class DeliveryController {
+
     private DeliveryService deliveryService = new DeliveryService();
         public void findAllVehicles() {
         List<VehicleDto> list;

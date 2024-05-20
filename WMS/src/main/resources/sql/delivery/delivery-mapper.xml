@@ -28,6 +28,22 @@
             product_no;
     </select>
 
+
+    <select id="findDispatchLog" resultMap="DeliveryDtoMap">
+        select
+            *
+        from
+            delivery_dispatch_log
+    </select>
+    <resultMap id="DeliveryDtoMap" type="DeliveryDto">
+        <id column = "dispatch_no" property="dispatchNo"/>
+        <result column="date" property="localDateTime"/>
+        <association property="vehicleDto" javaType="VehicleDto">
+            <id column="registration_no" property="registrationNo"/>
+        </association>
+    </resultMap>
+
+
     <select id="findAllPendingOutbound" resultMap="OutboundDtoForDeployMap">
         select
             *,
@@ -51,7 +67,17 @@
         <!-- 1:N 관계의 테이블 행 매핑 -->
         <collection property="productList" ofType="ProductDtoForDeploy">
             <id column="product_no" property="productNo"/>
+<!--            <id column="outbound_no" property="outboundNo"/>-->
             <result column="amount" property="amount"/>
         </collection>
     </resultMap>
+
+    <insert id = "insertDispatchLog" useGeneratedKeys="true" keyProperty="dispatchNo">
+        insert into
+        delivery_dispatch_log
+        values(
+        null, #{vehicleDto.registrationNo}, #{localDateTime}
+        )
+    </insert>
+
 </mapper>

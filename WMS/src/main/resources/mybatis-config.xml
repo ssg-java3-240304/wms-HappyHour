@@ -25,9 +25,15 @@
         </environment>
     </environments>
     <mappers>
+
         <!--        이 공간에 mapper 즉 DAO에 적용시킬 각 행동의 xml를 아래 처럼 쓸 공간입니다-->
         <mapper resource="sql/product/product-mapper.xml"/>
         <mapper resource="sql/product/category/product-category-mapper.xml"/>
         <mapper resource="sql/delivery/delivery-mapper.xml"/>
+        <!--        <mapper resource="sql/inventory/inventory-mapper.xml"/>-->
+        <mapper resource="sql/warehouse/warehouse-mapper.xml"/>
+        <mapper resource="sql/inoutbound/inbound-mapper.xml"/>
+        <mapper resource="sql/inoutbound/outbound-mapper.xml"/>
+        <mapper resource="sql/login/login-mapper.xml"/>
     </mappers>
 </configuration>

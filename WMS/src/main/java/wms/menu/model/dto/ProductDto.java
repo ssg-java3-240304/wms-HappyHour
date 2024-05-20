@@ -43,6 +43,18 @@ public class ProductDto {
         this.orderableStatus = orderableStatus;
     }
 
+    public ProductDto(int productNo, String productName, int productPrice, int categoryNo, int manufacturerNo, double alcoholVolume, int capacity, int cargoSpace, String orderableStatus) {
+        this.productNo = productNo;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.categoryNo = categoryNo;
+        this.manufacturerNo = manufacturerNo;
+        this.alcoholVolume = alcoholVolume;
+        this.capacity = capacity;
+        this.cargoSpace = cargoSpace;
+        this.orderableStatus = orderableStatus;
+    }
+
     public int getProductNo() {
         return productNo;
     }

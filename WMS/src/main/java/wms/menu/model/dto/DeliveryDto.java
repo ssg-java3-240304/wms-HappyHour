@@ -15,4 +15,5 @@ public class DeliveryDto {
     private VehicleDto vehicleDto;  //차량번호
     private LocalDateTime localDateTime;    //배차시간
     private List<OutboundDtoForDeploy> outboundList;    //화물 목록
+
 }
