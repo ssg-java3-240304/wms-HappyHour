@@ -17,12 +17,16 @@ public class ProductController {
 
     // 목록 조회
     public List<ProductDto> findAll() {
-        return productService.findAll();
+        List<ProductDto> list = productService.findAll();
+        ProductResultView.displayAllProduct(list);
+        return list;
     }
 
     // 제조사 목록 조회
-    public List<ManufacturerDto> findManufactruers() {
-        return productService.findManufacturers();
+    public List<ManufacturerDto> findManufacturers() {
+        List<ManufacturerDto> list = productService.findManufacturers();
+        ProductResultView.displayManufacturers(list);
+        return list;
     }
 
     // 상품 등록
