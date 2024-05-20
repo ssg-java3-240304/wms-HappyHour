@@ -9,5 +9,6 @@ import lombok.*;
 @ToString
 public class ProductDtoForDeploy {
     int productNo;
+    int outboundNo;
     int amount;
 }

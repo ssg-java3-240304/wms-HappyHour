@@ -20,6 +20,7 @@ public class DeliveryResultView {
         vehicleList(list);
     }
 
+
     public static void vehicleList(List<VehicleDto> list){
         for(VehicleDto vehicle :list){
             System.out.printf("등록번호: %s , 상태: %s, 적재용량: %d\n",

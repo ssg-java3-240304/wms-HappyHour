@@ -1,5 +1,6 @@
 package wms.menu.model.dao;
 
+import wms.menu.model.dto.DeliveryDto;
 import wms.menu.model.dto.InventoryForDeploy;
 import wms.menu.model.dto.OutboundDtoForDeploy;
 import wms.menu.model.dto.VehicleDto;
@@ -13,4 +14,8 @@ public interface DeliveryMapper {
     List<InventoryForDeploy> findAllInventory();
 
     List<OutboundDtoForDeploy> findAllPendingOutbound(String status);
+
+    int insertDispatchLog(DeliveryDto deliveryDto);
+
+    List<DeliveryDto> findDispatchLog();
 }

@@ -4,11 +4,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.*;
 import wms.common.OrderStatus;
 import wms.common.VehicleStatus;
+import wms.menu.model.dto.DeliveryDto;
 import wms.menu.model.dto.InventoryForDeploy;
 import wms.menu.model.dto.OutboundDtoForDeploy;
 import wms.menu.model.dto.VehicleDto;
 import wms.menu.resultview.DeliveryResultView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,10 +116,6 @@ class DeliveryMapperTest {
                     assertThat(outbound.getOutboundStatus()).isNotNull();
                     // nullable한 컬럼은 검증제외
                 });
-        System.out.println(list.get(0).getProductList().get(0));
-        System.out.println(list.get(0).getProductList().get(1));
-        System.out.println(list.get(0).getProductList().get(2));
-        System.out.println(list.get(0).getProductList().size());
         System.out.println(list);
         for(OutboundDtoForDeploy element : list){
             System.out.println("outbound_NO: " + element.getOutboundNo());
@@ -128,6 +126,24 @@ class DeliveryMapperTest {
 
     @Test
     void deploySingleVehicle(){
+
+    }
+
+    @DisplayName("배차내역 삽입")
+    @Test
+    public void dispatchLogTest() {
+        //given
+        DeliveryDto deliveryDto = new DeliveryDto();
+        VehicleDto vehicleDto = new VehicleDto();
+        vehicleDto.setRegistrationNo("58누 5999");
+        deliveryDto.setVehicleDto(vehicleDto);
+        deliveryDto.setLocalDateTime(LocalDateTime.now());
+        //when
+        deliveryMapper.insertDispatchLog(deliveryDto);
+        //then
+        List<DeliveryDto> list = deliveryMapper.findDispatchLog();
+//        System.out.println(list);
+        list.stream().forEach(System.out::println);
 
     }
 }
