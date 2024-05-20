@@ -8,21 +8,21 @@ import wms.menu.resultview.DeliveryResultView;
 import java.util.List;
 
 public class DeliveryController {
-    private DeliveryService deliveryService = new DeliveryService();
-        public void findAllVehicles() {
-        List<VehicleDto> list;
-        list = deliveryService.findAllVehicles();
-            DeliveryResultView.findAllvehicles(list);
-    }
-
-    public void findUsableVehicle() throws Exception{
-        List<VehicleDto> list;
-        list = deliveryService.findUsableVehicles();
-            DeliveryResultView.findUsableVehicles(list);
-    }
-
-    public void deploySingleVehicle() {
-        DeliveryDto deliveryDto = deliveryService.deploySingleVehicle();
-        DeliveryResultView.deploySingleVehicle(deliveryDto);
-    }
+//    private DeliveryService deliveryService = new DeliveryService();
+//        public void findAllVehicles() {
+//        List<VehicleDto> list;
+//        list = deliveryService.findAllVehicles();
+//            DeliveryResultView.findAllvehicles(list);
+//    }
+//
+//    public void findUsableVehicle() throws Exception{
+//        List<VehicleDto> list;
+//        list = deliveryService.findUsableVehicles();
+//            DeliveryResultView.findUsableVehicles(list);
+//    }
+//
+//    public void deploySingleVehicle() {
+//        DeliveryDto deliveryDto = deliveryService.deploySingleVehicle();
+//        DeliveryResultView.deploySingleVehicle(deliveryDto);
+//    }
 }

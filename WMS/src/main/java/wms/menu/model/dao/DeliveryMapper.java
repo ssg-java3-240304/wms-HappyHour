@@ -7,6 +7,6 @@ import wms.menu.model.service.DeliveryService;
 import java.util.List;
 
 public interface DeliveryMapper {
-    List<VehicleDto> findAllVehicles();
-    List<VehicleDto> findUsableVehicles(String status);
+//    List<VehicleDto> findAllVehicles();
+//    List<VehicleDto> findUsableVehicles(String status);
 }
