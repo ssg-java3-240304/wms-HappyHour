@@ -14,6 +14,14 @@ public class WarehouseSectionDto {
     private String sectionName;
     private int categoryNo;
 
-    private List<WarehouseSectionSpaceDto> sectionSpaceList;
     private ProductCategoryDto category;
+    private List<WarehouseSectionSpaceDto> sectionSpaceList;
+
+    public int getSectionSpace() {
+        int sectionSpace = 0;
+        for (WarehouseSectionSpaceDto sectionSpaceDto : sectionSpaceList) {
+            sectionSpace += sectionSpaceDto.getZone().getZoneSpace();
+        }
+        return sectionSpace;
+    }
 }

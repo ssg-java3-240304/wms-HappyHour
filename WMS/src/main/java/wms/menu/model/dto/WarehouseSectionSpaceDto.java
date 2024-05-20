@@ -13,5 +13,5 @@ public class WarehouseSectionSpaceDto {
     private int sectionNo;
     private int zoneNo;
 
-    private WarehouseZoneDto zoneList;
+    private WarehouseZoneDto zone;
 }
