@@ -21,7 +21,7 @@
                 <property name="url" value="jdbc:mysql://techbrew4.iptime.org:3306/happyhourdb"/>
                 <property name="username" value="hhdb"/>
                 <property name="password" value="hhdb"/>
-            </dataSource>
+          </dataSource>
         </environment>
     </environments>
     <mappers>
@@ -34,5 +34,6 @@
         <mapper resource="sql/warehouse/warehouse-mapper.xml"/>
         <mapper resource="sql/inoutbound/inbound-mapper.xml"/>
         <mapper resource="sql/inoutbound/outbound-mapper.xml"/>
+        <mapper resource="sql/login/login-mapper.xml"/>
     </mappers>
 </configuration>
