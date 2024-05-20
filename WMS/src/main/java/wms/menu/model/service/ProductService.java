@@ -85,18 +85,19 @@ public class ProductService {
         return productDto;
     }
 
-    public void insertProductToInboundOrderable(int productNo, char orderableStatus) {
+    // 상품 등록 후 inbound_orderable 테이블에 데이터 자동등록
+    public int insertProductToInboundOrderable(int productNo, String orderableStatus) {
         SqlSession sqlSession = getSqlSession();
         ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-        ProductDto productDto = productMapper.insertProductToInboundOrderable(productNo, orderableStatus);
-        sqlSession.close();
+        try {
+            int result = productMapper.insertProductToInboundOrderable(productNo, orderableStatus);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            sqlSession.close();
+        }
     }
-
-//    public int findProductNo(String productName) {
-//        SqlSession sqlSession = getSqlSession();
-//        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
-//        int productNo = productMapper.findProductNo(productName);
-//        sqlSession.close();
-//        return productNo;
-//    }
 }

@@ -35,14 +35,6 @@
             </if>
         </where>
     </select>
-<!--    <select id="findProductNo" resultType="int">-->
-<!--        select-->
-<!--        product_no-->
-<!--        from-->
-<!--        product-->
-<!--        where-->
-<!--        product_name = #{productName}-->
-<!--    </select>-->
     <delete id="deleteProduct">
         delete from product where product_no = #{productNo}
     </delete>
@@ -56,7 +48,7 @@
             #{alcoholVolume}, #{capacity}, #{cargoSpace}
         )
     </insert>
-    <insert id="insertProductToInboundOrderable" useGeneratedKeys="true" keyProperty="productNo">
+    <insert id="insertProductToInboundOrderable">
         insert into
         inbound_orderable
         values

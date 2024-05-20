@@ -36,7 +36,7 @@ public class ProductController {
         if (result > 0){
             // 상품등록에 성공하면 inbound_orderable테이블에 상품정보 추가
 //            int productNo = productService.findProductNo(productDto.getProductName());
-            productService.insertProductToInboundOrderable(productDto.getProductNo(), productDto.getOrderableStatus());
+            int result2 = productService.insertProductToInboundOrderable(productDto.getProductNo(), productDto.getOrderableStatus());
         }
     }
 

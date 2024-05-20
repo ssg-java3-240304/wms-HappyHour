@@ -128,19 +128,41 @@ public class ProductView {
 
     // 상품 등록
     private ProductDto inputProduct() {
+        String productName;
+        int productPrice;
+        int categoryNo;
+        int manufacturer;
+        double alcoholVolume;
+        int capacity;
+        int cargoSpace;
+        String orderableStatus;
+
         System.out.println("> 등록할 상품정보를 작성해주세요.");
         System.out.print("> 상품명 : ");
         sc.nextLine();
-        String productName = sc.nextLine();
-        System.out.print("> 상품 가격 : ");
-        int productPrice = sc.nextInt();
+        productName = sc.nextLine();
+
+        while (true) {
+            try {
+                System.out.print("> 상품 가격 : ");
+                productPrice = sc.nextInt();
+                if (productPrice > 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수를 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+
         // 상품 카테고리 전체 조회
         List<ProductCategoryDto> list = productCategoryController.findAll();
         for (ProductCategoryDto productCategoryDto : list) {
             System.out.println(productCategoryDto);
         }
         // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
-        int categoryNo;
         while (true) {
             System.out.print("> 상품 카테고리 번호 : ");
             int inputProductCategory = sc.nextInt();
@@ -159,7 +181,7 @@ public class ProductView {
 //        displayManufacturerList();
         // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
         List<ManufacturerDto> manufacturerFindAll = productController.findManufacturers();
-        int manufacturer;
+
         while (true) {
             System.out.print("> 제조사 : ");
             int inputManufacturer = sc.nextInt();
@@ -174,14 +196,58 @@ public class ProductView {
         }
 //        System.out.print("> 제조사 : ");
 //        int manufacturer = sc.nextInt();
-        System.out.print("> 도수 : ");
-        double alcoholVolume = sc.nextDouble();
-        System.out.print("> 용량 : ");
-        int capacity = sc.nextInt();
-        System.out.print("> 적재공간 : ");
-        int cargoSpace = sc.nextInt();
-        System.out.print("> 주문 가능 여부(Y/N) : ");
-        char orderableStatus = sc.next().toUpperCase().charAt(0);
+
+        while (true) {
+            try {
+                System.out.print("> 도수 : ");
+                alcoholVolume = sc.nextDouble();
+                if (alcoholVolume > 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수를 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+        while (true) {
+            try {
+                System.out.print("> 용량 : ");
+                capacity = sc.nextInt();
+                if (capacity > 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수를 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+        while (true) {
+            try {
+                System.out.print("> 적재공간 : ");
+                cargoSpace = sc.nextInt();
+                if (cargoSpace > 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수를 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+        while (true){
+            System.out.print("> 주문 가능 여부(Y/N) : ");
+            orderableStatus = sc.next().toUpperCase();
+            if (orderableStatus.equals("Y") || orderableStatus.equals("N")){
+                break;
+            } else {
+                System.out.println("잘못 입력하셨습니다. 제시된 글자로 다시 입력해주세요.");
+            }
+        }
         return new ProductDto(productName, productPrice, categoryNo, manufacturer, alcoholVolume, capacity, cargoSpace, orderableStatus);
     }
 
