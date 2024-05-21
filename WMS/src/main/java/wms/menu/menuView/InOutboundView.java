@@ -30,7 +30,7 @@ public class InOutboundView {
                 case "1" : inOutboundController.findReceiptLog(); break;
                 case "2" : inOutboundController.findDispatchLog(); break;
                 case "3" : inOutboundController.findReceiptDispatchLog(); break;
-                case "0" : ;mainMenuController.mainMenuView();
+                case "0" : return;
                 default:
                     System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
             }
