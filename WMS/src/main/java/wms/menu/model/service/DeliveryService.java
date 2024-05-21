@@ -7,10 +7,7 @@ import wms.menu.model.dao.DeliveryMapper;
 import wms.menu.model.dto.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static wms.common.MyBatisTemplate.getSqlSession;
 
@@ -92,22 +89,24 @@ public class DeliveryService {
             List<Integer> productKeyList = productAmountMap.keySet().stream().toList();
             //재고 조회
             List<InventoryDto> inventoryList = deliveryMapper.findInventoryByProductNo(productKeyList);
-
-            DispatchDto dispatchDto = new DispatchDto();
-            dispatchDto.setDispatchNo();
-            dispatchDto.setDate();
-            dispatchDto.setProductName();
-            dispatchDto.setAmount();
-            dispatchDto.setSectionNo();
-
             //재고 감소 처리
-            getDispatchedInventory(inventoryList, productAmountMap);
+            List<InventoryDto> dispatchedIvnList = getDispatchedInventory(inventoryList, productAmountMap);
+
             //재고 업데이트
-            deliveryMapper.dispatchInventory(inventoryList);
+            deliveryMapper.dispatchInventory(dispatchedIvnList);
+
+            //출고기록 생성
+            List<DispatchDto> dispatchDtoLogList = CreateDispatchLogList(deliveryDto, inventoryList, dispatchedIvnList);
+            System.out.println(dispatchDtoLogList.get(0).getProductName() +" " + dispatchDtoLogList.get(0).getAmount());
 
             //출고기록 업데이트
-
+            for(DispatchDto log : dispatchDtoLogList){
+                deliveryMapper.insertOutboundLog(log);
+            }
             //출고상품 업데이트
+            for(DispatchDto log : dispatchDtoLogList){
+                deliveryMapper.insertOutboundLog(log);
+            }
 
             sqlSession.commit();
 
@@ -164,6 +163,7 @@ public class DeliveryService {
     }
 
     //배차 상품 삽입
+
     private Map<Integer, Integer> getDispatchProductMap(DeliveryDto deliveryDto){
         Map<Integer, Integer> productMap = new HashMap<>();
 
@@ -175,23 +175,67 @@ public class DeliveryService {
         }
         return productMap;
     }
-
     private List<InventoryDto> getDispatchedInventory(List<InventoryDto> inventoryList, Map<Integer, Integer> productAmountMap){
         //            각 재고마다 해쉬 맵을 검사하여 해쉬 맵에 값이 있으면 스스로의 재고를 감소
-        for(InventoryDto inventory : inventoryList){
+        List<InventoryDto> copiedList = new ArrayList<>();
+
+        for(InventoryDto inven : inventoryList){
+            InventoryDto copy = new InventoryDto();
+            copy.setProductNo(inven.getProductNo());
+            copy.setProductName(inven.getProductName());
+            copy.setAmount(inven.getAmount());
+            copy.setCargoSpace(inven.getCargoSpace());
+            copy.setSectionNo(inven.getSectionNo());
+            copy.setSectionName(inven.getSectionName());
+            copiedList.add(copy);
+        }
+
+        Map<Integer, Integer> copiedProductAmount = new HashMap<>();
+
+        for(Map.Entry<Integer, Integer> entry : productAmountMap.entrySet()){
+            copiedProductAmount.put(entry.getKey(), entry.getValue());
+        }
+
+        for (InventoryDto inventory : copiedList) {
             int productNo = inventory.getProductNo();
             int productAmount = inventory.getAmount();
-            if(0 == productAmountMap.get(productNo))
+            if (0 == copiedProductAmount.get(productNo))
                 continue;
-            if(productAmountMap.get(productNo) <= productAmount){
-                productAmount = productAmount - productAmountMap.get(productNo);
-                productAmountMap.put(productNo, 0);
-            }else{
-                productAmountMap.put(productNo, productAmountMap.get(productNo) - productAmount);
+            if (copiedProductAmount.get(productNo) <= productAmount) {
+                productAmount = productAmount - copiedProductAmount.get(productNo);
+                copiedProductAmount.put(productNo, 0);
+            } else {
+                copiedProductAmount.put(productNo, copiedProductAmount.get(productNo) - productAmount);
                 productAmount = 0;
             }
             inventory.setAmount(productAmount);
         }
-        return inventoryList;
+        return copiedList;
+    }
+
+    /**
+     *
+     * @param deliveryDto 배송정보 DTO
+     * @param inventoryList 원본 재고기록
+     * @param dispatchedIvnList 출고한 재고기록
+     * @return
+     */
+    private List<DispatchDto> CreateDispatchLogList(DeliveryDto deliveryDto, List<InventoryDto> inventoryList, List<InventoryDto> dispatchedIvnList) {
+        List<DispatchDto> resultList = new ArrayList<>();
+
+        for(int i = 0 ; i < inventoryList.size() ; i++){
+            InventoryDto original = inventoryList.get(i);
+            InventoryDto dispatched = dispatchedIvnList.get(i);
+            if (original.getAmount() - dispatched.getAmount() < original.getAmount()){
+                DispatchDto resultDispatch = new DispatchDto();
+                resultDispatch.setDispatchNo(deliveryDto.getDispatchNo());
+                resultDispatch.setDate(LocalDateTime.now());
+                resultDispatch.setProductName(original.getProductName());
+                resultDispatch.setAmount(original.getAmount() - dispatched.getAmount());
+                resultDispatch.setSectionNo(original.getSectionNo());
+                resultList.add(resultDispatch);
+            }
+        }
+        return resultList;
     }
 }

@@ -28,4 +28,8 @@ public interface DeliveryMapper {
     List<InventoryDto> findInventoryByProductNo(List<Integer> productNo);
 
     void dispatchInventory(List<InventoryDto> inventoryList);
+
+    void insertOutboundLog(DispatchDto dispatchLog);
+
+    void insertOutboundProductLog(DispatchDto dispatchLog);
 }

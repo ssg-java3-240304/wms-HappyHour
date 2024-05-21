@@ -30,6 +30,6 @@ class DeliveryServiceTest {
         for(VehicleDto vehicleDto : deliveryService.findAllVehicles()){
             System.out.println(vehicleDto);
         }
-        System.out.println(deliveryService.findDispatchLog());
+        System.out.println("-----------------------------");
     }
 }
