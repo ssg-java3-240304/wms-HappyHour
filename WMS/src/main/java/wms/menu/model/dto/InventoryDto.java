@@ -12,10 +12,22 @@ public class InventoryDto {
     private int productNo;
     private int amount;
 
-    // 구역명
-    private String sectionName;
-    // 상품명
-    private String productName;
-    // 상품의 적재 공간
-    private int cargoSpace;
+    private WarehouseSectionDto warehouseSection;
+    private ProductDto product;
+
+    public String getSectionName() {
+        return this.warehouseSection.getSectionName();
+    }
+    public String getProductName() {
+        return this.product.getProductName();
+    }
+    public int getPerCargoSpace() {
+        return this.product.getCargoSpace();
+    }
+    public int getCargoSpace() {
+        return this.product.getCargoSpace() * this.amount;
+    }
+    public int getCategoryNo() {
+        return this.product.getCategoryNo();
+    }
 }

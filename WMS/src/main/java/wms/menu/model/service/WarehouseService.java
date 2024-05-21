@@ -16,4 +16,12 @@ public class WarehouseService {
         sqlSession.close();
         return list;
     }
+
+    public List<WarehouseSectionDto> findMoveableSection(int categoryNo, int sectionNo) {
+        SqlSession sqlSession = getSqlSession();
+        WarehouseMapper mapper = sqlSession.getMapper(WarehouseMapper.class);
+        List<WarehouseSectionDto> list = mapper.findMoveableSection(categoryNo, sectionNo);
+        sqlSession.close();
+        return list;
+    }
 }

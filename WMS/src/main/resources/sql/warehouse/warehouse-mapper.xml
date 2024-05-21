@@ -7,27 +7,54 @@
         <id column="section_no" property="sectionNo"/>
         <result column="section_name" property="sectionName"/>
         <result column="category_no" property="categoryNo"/>
+        <!-- ProductCategoryDto -->
         <association property="category" javaType="ProductCategoryDto">
             <id column="category_no" property="categoryNo"/>
             <result column="category_name" property="categoryName"/>
         </association>
-        <collection property="sectionSpaceList" ofType="warehouseSectionSpaceDto">
+        <!-- List<WarehouseSectionSpaceDto> -->
+        <collection property="sectionSpaceList" ofType="WarehouseSectionSpaceDto">
             <id column="section_no" property="sectionNo"/>
             <id column="zone_no" property="zoneNo"/>
-            <association property="zone" javaType="warehouseZoneDto">
+            <!-- WarehouseZoneDto -->
+            <association property="zone" javaType="WarehouseZoneDto">
                 <id column="zone_no" property="zoneNo"/>
                 <result column="zone_name" property="zoneName"/>
                 <result column="zone_space" property="zoneSpace"/>
+            </association>
+        </collection>
+        <!-- List<InventoryDto> -->
+        <collection property="inventoryList" ofType="InventoryDto">
+            <id column="section_no" property="sectionNo"/>
+            <id column="product_no" property="productNo"/>
+            <result column="amount" property="amount"/>
+            <!-- ProductDto -->
+            <association property="product" javaType="ProductDto">
+                <result column="cargo_space" property="cargoSpace"/>
             </association>
         </collection>
     </resultMap>
     <!-- 창고 구역 조회 -->
     <select id="findAllSection" resultMap="WarehouseSectionDtoMap">
         select *
-        from warehouse_section s
+        from warehouse_section ws
                 left join warehouse_section_space sp using (section_no)
                 left join category c using (category_no)
                 left join warehouse_zone z using (zone_no)
-        order by s.section_no
+                left join inventory i using (section_no)
+                left join product p using (product_no)
+    </select>
+    <!-- 재고 이동 가능한 창고 -->
+    <select id="findMoveableSection" resultMap="WarehouseSectionDtoMap">
+        select *
+        from warehouse_section ws
+                left join warehouse_section_space sp using (section_no)
+                left join category c using (category_no)
+                left join warehouse_zone z using (zone_no)
+                left join inventory i using (section_no)
+                left join product p using (product_no)
+        where ws.category_no like #{categoryNo}
+          and ws.section_no != #{sectionNo}
+        order by ws.section_no;
     </select>
 </mapper>

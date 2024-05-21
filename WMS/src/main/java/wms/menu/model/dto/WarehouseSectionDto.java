@@ -16,6 +16,17 @@ public class WarehouseSectionDto {
 
     private ProductCategoryDto category;
     private List<WarehouseSectionSpaceDto> sectionSpaceList;
+    private List<InventoryDto> inventoryList;
+
+    public int getCargoSpace() {
+        int cargoSpace = 0;
+        for (InventoryDto inventoryDto : inventoryList) {
+            if (inventoryDto.getProduct() != null) {
+                cargoSpace += inventoryDto.getProduct().getCargoSpace() * inventoryDto.getAmount();
+            }
+        }
+        return cargoSpace;
+    }
 
     public int getSectionSpace() {
         int sectionSpace = 0;
@@ -24,4 +35,15 @@ public class WarehouseSectionDto {
         }
         return sectionSpace;
     }
+
+    public int getFreeSpace() {
+        int freeSpace = 0;
+        // 적재 공간
+        freeSpace += getSectionSpace();
+        // 적재량
+        freeSpace -= getCargoSpace();
+        return freeSpace;
+    }
+
+
 }

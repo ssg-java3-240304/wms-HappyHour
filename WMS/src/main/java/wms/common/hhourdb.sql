@@ -335,6 +335,7 @@ insert into warehouse_section values (null, '위스키 창고', 3);
 insert into warehouse_section values (null, '보드카 창고', 4);
 insert into warehouse_section values (null, '와인 창고', 5);
 insert into warehouse_section values (null, '기타주류 창고', 6);
+insert into warehouse_section values (null, '소주 여유 창고', 1);
 
 insert into warehouse_zone values (null, 'A', 1000);
 insert into warehouse_zone values (null, 'B', 1000);
@@ -357,6 +358,7 @@ insert into warehouse_section_space values (502, 14);
 insert into warehouse_section_space values (503, 15);
 insert into warehouse_section_space values (504, 16);
 insert into warehouse_section_space values (505, 17);
+insert into warehouse_section_space values (506, 18);
 
 insert into inventory values (501, 60001, 135);
 insert into inventory values (501, 60002, 54);
