@@ -1,3 +1,47 @@
+
+
+
+
+use happyhourdb;
+select sum(amount)
+from
+    inventory inven
+        join warehouse_section ws on inven.section_no = ws.section_no
+        join
+    warehouse_zone wz on ws.section_no = wz.zone_no
+where
+    category_no = 3
+group by
+    ws.section_no;
+
+select *
+from warehouse_zone;
+
+select count(zone_no)*1000
+from warehouse_section_space join warehouse_section ws on warehouse_section_space.section_no = ws.section_no
+where category_no=3
+group by ws.section_no limit 1;
+
+
+select sum(amount) 현재재고
+from inventory inven join warehouse_section ws on inven.section_no = ws.section_no
+where category_no = #{cae}
+group by ws.section_no;
+
+select *
+from warehouse_section;
+
+
+
+
+
+
+
+
+
+
+
+
 -- 테이블 삭제
 drop table if exists receipt_product cascade;
 drop table if exists receipt_log cascade;
