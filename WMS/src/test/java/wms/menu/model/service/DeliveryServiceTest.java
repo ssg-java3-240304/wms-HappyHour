@@ -16,5 +16,6 @@ class DeliveryServiceTest {
         for(OutboundDtoForDeploy outboundDtoForDeploy : deliveryDto.getOutboundList()){
             System.out.println(outboundDtoForDeploy);
         }
+//        deliveryService.findDispatchLog();
     }
 }
