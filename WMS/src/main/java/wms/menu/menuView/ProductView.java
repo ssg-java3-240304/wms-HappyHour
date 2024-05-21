@@ -96,22 +96,28 @@ public class ProductView {
         ProductDto chosenProduct = null;
         int productNo = 0;
         do {
-            System.out.println("> 수정할 상품 번호를 작성해주세요");
-            productNo = sc.nextInt();
-            // 수정할 상품 번호 입력했을 때, 입력한 값의 리스트만 조회
-            displayFindByNo(productNo);
-            int finalProductNo = productNo;
-            chosenProduct = list.stream()
-                    .filter((p) -> p.getProductNo() == finalProductNo)
-                    .findFirst()
-                    .orElse(null); // 값이 존재하면, 값을 반환. 값이 존재하지 않으면 지정한 other값이 반환.
+            try {
+                System.out.println("> 수정할 상품 번호를 작성해주세요");
+                productNo = sc.nextInt();
+                // 수정할 상품 번호 입력했을 때, 입력한 값의 리스트만 조회
+                displayFindByNo(productNo);
+                int finalProductNo = productNo;
+                chosenProduct = list.stream()
+                        .filter((p) -> p.getProductNo() == finalProductNo)
+                        .findFirst()
+                        .orElse(null); // 값이 존재하면, 값을 반환. 값이 존재하지 않으면 지정한 other값이 반환.
 //            if (chosenProduct != null)
 //                System.out.println(chosenProduct);
 //            else
 //                System.out.println("상품 번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
-            if (chosenProduct == null)
-                System.out.println("상품 번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
+                if (chosenProduct == null)
+                    System.out.println("상품 번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
         } while (chosenProduct == null);
+
         System.out.println("> 수정할 상품정보를 작성해주세요");
         System.out.print("> 상품명 : ");
         String productName = sc.next();
@@ -167,44 +173,47 @@ public class ProductView {
         }
 
         // 상품 카테고리 전체 조회
-        displayCategoryList();
-        System.out.print("> 상품 카테고리 : ");
-        categoryNo = sc.nextInt();
-
         List<ProductCategoryDto> list = productCategoryController.findAll();
-        for (ProductCategoryDto productCategoryDto : list) {
-            System.out.println(productCategoryDto);
-        }
         // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
         while (true) {
-            System.out.print("> 상품 카테고리 번호 : ");
-            int inputProductCategory = sc.nextInt();
-            boolean isValid = list.stream()
-                    .anyMatch(l -> l.getCategoryNo() == inputProductCategory);
-            if(isValid) {
-                categoryNo = inputProductCategory;
-                break;
-            } else {
-                System.out.println("카테고리 번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
+            try {
+                System.out.print("> 상품 카테고리 번호 : ");
+                int inputProductCategory = sc.nextInt();
+                boolean isValid = list.stream()
+                        .anyMatch(l -> l.getCategoryNo() == inputProductCategory);
+                if(isValid) {
+                    categoryNo = inputProductCategory;
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
             }
         }
 //        System.out.print("> 상품 카테고리 : ");
 //        int productCategory = sc.nextInt();
         // 제조사 전체 조회
 //        displayManufacturerList();
-        // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
         List<ManufacturerDto> manufacturerFindAll = productController.findManufacturers();
 
         while (true) {
-            System.out.print("> 제조사 : ");
-            int inputManufacturer = sc.nextInt();
-            boolean isValid = manufacturerFindAll.stream()
-                    .anyMatch(m -> m.getManufacturerNo() == inputManufacturer);
-            if (isValid) {
-                manufacturer = inputManufacturer;
-                break;
-            } else {
-                System.out.println("제조사 번호를 잘못 입력하셨습니다. 다시 입력해주세요.");
+            try {
+                System.out.print("> 제조사 : ");
+                int inputManufacturer = sc.nextInt();
+                // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
+                boolean isValid = manufacturerFindAll.stream()
+                        .anyMatch(m -> m.getManufacturerNo() == inputManufacturer);
+                if (isValid) {
+                    manufacturer = inputManufacturer;
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
             }
         }
 //        System.out.print("> 제조사 : ");
