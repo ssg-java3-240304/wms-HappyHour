@@ -28,7 +28,7 @@ public class DeliveryService {
         sqlSession.close();
         return list;
     }
-
+/*
     public List<DeliveryDto> findDispatchLog(){
         SqlSession sqlSession =getSqlSession();
         DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
@@ -36,6 +36,8 @@ public class DeliveryService {
         sqlSession.close();
         return list;
     }
+
+ */
 
     /**
      * 1개의 화물차량을 적재하고 실행 결과를 반환하는 서비스
@@ -57,9 +59,18 @@ public class DeliveryService {
         //배차
         deliveryDto.setOutboundList(dispatchedOutboundList);
         List<VehicleDto> list = deliveryMapper.findUsableVehicles(VehicleStatus.NOT_DISPATCHED.getStatus());
+        if(list.isEmpty())  //배차 실패
+            return null;
         VehicleDto vehicleDto = list.get(0);
         deliveryDto.setVehicleDto(vehicleDto);
         deliveryDto.setLocalDateTime(LocalDateTime.now());
+        //수주 목록 배차됨으로 변경
+
+        for(OutboundDtoForDeploy outbound :outboundFullList){
+            outbound.setOutboundStatus(OrderStatus.DEPLOYED.getStatus());
+            deliveryMapper.updateOutboundStatus(outbound);
+        }
+
 
 //        배차가 종료됨과 동시에
         try {
@@ -73,7 +84,6 @@ public class DeliveryService {
             //배차수주 업데이트
             for(OutboundDtoForDeploy outboundDto :deliveryDto.getOutboundList()){
                 //배차수주 테이블 업데이트
-                System.out.println("dispatchNo : " + deliveryDto.getDispatchNo());
                 result = deliveryMapper.insertDispatchOutbound(deliveryDto.getDispatchNo(), outboundDto.getOutboundNo());
             }
 
@@ -97,7 +107,6 @@ public class DeliveryService {
 
             //출고기록 생성
             List<DispatchDto> dispatchDtoLogList = CreateDispatchLogList(deliveryDto, inventoryList, dispatchedIvnList);
-            System.out.println(dispatchDtoLogList.get(0).getProductName() +" " + dispatchDtoLogList.get(0).getAmount());
 
             //출고기록 업데이트
             for(DispatchDto log : dispatchDtoLogList){
@@ -105,14 +114,14 @@ public class DeliveryService {
             }
             //출고상품 업데이트
             for(DispatchDto log : dispatchDtoLogList){
-                deliveryMapper.insertOutboundLog(log);
+                deliveryMapper.insertOutboundProductLog(log);
             }
 
             sqlSession.commit();
 
         } catch (RuntimeException e) {
             sqlSession.rollback();
-            e.printStackTrace();
+            return null;
         }finally {
             sqlSession.close();
         }
@@ -231,11 +240,20 @@ public class DeliveryService {
                 resultDispatch.setDispatchNo(deliveryDto.getDispatchNo());
                 resultDispatch.setDate(LocalDateTime.now());
                 resultDispatch.setProductName(original.getProductName());
+                resultDispatch.setProductNo(original.getProductNo());
                 resultDispatch.setAmount(original.getAmount() - dispatched.getAmount());
                 resultDispatch.setSectionNo(original.getSectionNo());
                 resultList.add(resultDispatch);
             }
         }
         return resultList;
+    }
+
+    public List<DeliveryDto> findAllDeployList() {
+        SqlSession sqlSession = getSqlSession();
+        DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
+        List<DeliveryDto> list = deliveryMapper.findAllDeploy();
+        sqlSession.close();
+        return list;
     }
 }

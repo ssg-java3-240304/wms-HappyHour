@@ -113,7 +113,7 @@ create table if not exists outbound (
                                         outbound_status varchar(10) not null comment '수주상태',
                                         constraint pk_outbound_no primary key(outbound_no),
                                         constraint fk_outbound_franchise_no foreign key (franchise_no) references franchise (franchise_no),
-                                        constraint ck_outbound_status check (binary outbound_status in ('completed', 'preparing', 'canceled'))
+                                        constraint ck_outbound_status check (binary outbound_status in ('completed', 'preparing', 'deployed', 'canceled'))
 ) engine=innodb comment '수주';
 
 alter table outbound auto_increment = 9990;
@@ -122,6 +122,7 @@ create table if not exists outbound_product (
                                                 outbound_no int comment '수주번호',
                                                 product_no int comment '상품번호',
                                                 amount int not null comment '수량',
+
                                                 constraint pk_outbound_no_product_no primary key(outbound_no, product_no),
                                                 constraint fk_outbound_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
                                                 constraint fk_outbound_product_product_no foreign key (product_no) references product (product_no),
@@ -208,12 +209,10 @@ alter table dispatch_log auto_increment = 81111;
 
 create table if not exists dispatch_product (
                                                 dispatch_no int comment '출고번호',
-                                                outbound_no int comment '수주번호',
                                                 product_no int not null comment '상품번호',
                                                 amount int not null comment '수량',
-                                                constraint pk_dispatch_no_outbound_no primary key(dispatch_no, outbound_no),
+                                                constraint pk_dispatch_no_outbound_no primary key(dispatch_no, product_no),
                                                 constraint fk_dispatch_product_dispatch_no foreign key (dispatch_no) references dispatch_log (dispatch_no),
-                                                constraint fk_dispatch_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
                                                 constraint fk_dispatch_product_product_no foreign key (product_no) references product (product_no),
                                                 constraint ck_dispatch_product_amount check (amount > 0)
 ) engine=innodb comment '출고상품';
@@ -391,7 +390,7 @@ insert into delivery_dispatch_product values (1, 60003, 234);
 
 insert into dispatch_log values (null, '2024-05-14 10:12:15');
 
-insert into dispatch_product values (81111, 9990, 60003, 234);
+insert into dispatch_product values (81111, 60003, 234);
 
 insert into receipt_log values (null, '2024-05-13 08:23:08');
 

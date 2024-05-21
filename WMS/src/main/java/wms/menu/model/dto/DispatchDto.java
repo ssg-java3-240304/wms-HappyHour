@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class DispatchDto {
     private int dispatchNo;
     private LocalDateTime date;
+    private int productNo;
     private String productName;
     private int amount;
     private int sectionNo;

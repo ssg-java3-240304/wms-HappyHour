@@ -1,6 +1,7 @@
 package wms.menu.resultview;
 
 import wms.menu.model.dto.DeliveryDto;
+import wms.menu.model.dto.OutboundDtoForDeploy;
 import wms.menu.model.dto.VehicleDto;
 
 import java.util.List;
@@ -28,5 +29,29 @@ public class DeliveryResultView {
     }
 
     public static void deploySingleVehicle(DeliveryDto deliveryDto) {
+        if(deliveryDto == null){
+            System.out.println("배차 할 수 없습니다");
+            return ;
+        }
+        System.out.println("배차 결과");
+        System.out.printf("배차번호 : %d, 차량번호 : %s , 작성시간 : %s\n",deliveryDto.getDispatchNo(), deliveryDto.getVehicleDto().getRegistrationNo(), deliveryDto.getLocalDateTime());
+        System.out.println("적재 주문 목록 : ");
+        for(OutboundDtoForDeploy outbound : deliveryDto.getOutboundList()){
+            System.out.printf("[%d]  ", outbound.getOutboundNo());
+        }
+    }
+
+    public static void showAllDeployList(List<DeliveryDto> deliveryDtoList) {
+        System.out.print("""
+                ========전체 배차 내역을 출력합니다========
+                """);
+        for(DeliveryDto deliveryDto : deliveryDtoList){
+            System.out.printf("배차번호 : %d, 차량번호 : %S, 배차시간 : %s\n", deliveryDto.getDispatchNo(), deliveryDto.getVehicleDto().getRegistrationNo(), deliveryDto.getLocalDateTime());
+            System.out.print(" - 배정된 주문서 : ");
+            for(OutboundDtoForDeploy outbound: deliveryDto.getOutboundList()) {
+                System.out.print(outbound.getOutboundNo() + " ");
+            }
+            System.out.println();
+        }
     }
 }
