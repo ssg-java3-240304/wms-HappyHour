@@ -1,5 +1,6 @@
 package wms.menu.model.dao;
 
+import org.apache.ibatis.annotations.Param;
 import wms.menu.model.dto.ManufacturerDto;
 import wms.menu.model.dto.ProductDto;
 
@@ -25,6 +26,9 @@ public interface ProductMapper {
 
     // 상품 수정
     int updateProduct(ProductDto productDto);
+
+    // 상품 등록 후 inbound_orderable 테이블에 데이터 자동등록
+    int insertProductToInboundOrderable(@Param("productNo") int productNo, @Param("orderableStatus") String orderableStatus);
 
     ProductDto findByProductNo(int productNo);
 }

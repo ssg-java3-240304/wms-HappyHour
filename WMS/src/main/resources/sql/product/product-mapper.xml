@@ -54,6 +54,14 @@
             #{alcoholVolume}, #{capacity}, #{cargoSpace}
         )
     </insert>
+    <insert id="insertProductToInboundOrderable">
+        insert into
+        inbound_orderable
+        values
+        (
+        #{productNo}, #{orderableStatus}, 2
+        )
+    </insert>
     <update id="updateProduct">
         update
             product
