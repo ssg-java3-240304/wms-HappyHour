@@ -39,12 +39,15 @@ public class DeliveryResultView {
         for(OutboundDtoForDeploy outbound : deliveryDto.getOutboundList()){
             System.out.printf("[%d]  ", outbound.getOutboundNo());
         }
+        System.out.println("\n");
     }
 
     public static void showAllDeployList(List<DeliveryDto> deliveryDtoList) {
         System.out.print("""
                 ========전체 배차 내역을 출력합니다========
                 """);
+        if(deliveryDtoList.isEmpty())
+            System.out.println("배차내역이 없습니다");
         for(DeliveryDto deliveryDto : deliveryDtoList){
             System.out.printf("배차번호 : %d, 차량번호 : %S, 배차시간 : %s\n", deliveryDto.getDispatchNo(), deliveryDto.getVehicleDto().getRegistrationNo(), deliveryDto.getLocalDateTime());
             System.out.print(" - 배정된 주문서 : ");
