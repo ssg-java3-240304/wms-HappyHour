@@ -10,7 +10,6 @@ public class DeliveryResultView {
         System.out.println("=====모든 차량 조회=====");
         vehicleList(list);
     }
-
     public static void findUsableVehicles(List<VehicleDto> list) throws Exception {
         System.out.println("=====이용 가능한 차량 조회=====");
         if(list == null){
@@ -19,6 +18,7 @@ public class DeliveryResultView {
         }
         vehicleList(list);
     }
+
 
     public static void vehicleList(List<VehicleDto> list){
         for(VehicleDto vehicle :list){

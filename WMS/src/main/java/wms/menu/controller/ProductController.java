@@ -12,23 +12,28 @@ import java.util.List;
 public class ProductController {
     private ProductService productService = new ProductService();
 
-    public void productManage(ProductDto productDto) {
-    }
-
     // 목록 조회
     public List<ProductDto> findAll() {
-        return productService.findAll();
+        List<ProductDto> list = productService.findAll();
+        ProductResultView.displayAllProduct(list);
+        return list;
     }
 
     // 제조사 목록 조회
-    public List<ManufacturerDto> findManufactruers() {
-        return productService.findManufacturers();
+    public List<ManufacturerDto> findManufacturers() {
+        List<ManufacturerDto> list = productService.findManufacturers();
+        ProductResultView.displayManufacturers(list);
+        return list;
     }
 
     // 상품 등록
     public void insertProduct(ProductDto productDto) {
         int result = productService.insertProduct(productDto);
         ProductResultView.displayResult("상품 등록", result);
+        if (result > 0){
+            // 상품등록에 성공하면 inbound_orderable테이블에 상품정보 추가
+            int result2 = productService.insertProductToInboundOrderable(productDto.getProductNo(), productDto.getOrderableStatus());
+        }
     }
 
     // 상품 삭제
@@ -55,7 +60,13 @@ public class ProductController {
 
     // 원래 상품 정보
     public ProductDto findByNo(int productNo) {
-        return productService.findByNo(productNo);
+        try {
+            ProductDto productByNo = productService.findByNo(productNo);
+            ProductResultView.displayFindByNo(productByNo);
+            return productByNo;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

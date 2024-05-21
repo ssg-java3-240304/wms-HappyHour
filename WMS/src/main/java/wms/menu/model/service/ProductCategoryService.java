@@ -65,4 +65,12 @@ public class ProductCategoryService {
             sqlSession.close();
         }
     }
+
+    public ProductCategoryDto findByCategoryNo(int categoryNo) {
+        SqlSession sqlSession = getSqlSession();
+        ProductCategoryMapper productCategoryMapper = sqlSession.getMapper(ProductCategoryMapper.class);
+        ProductCategoryDto productCategoryDto = productCategoryMapper.findByCategoryNo(categoryNo);
+        sqlSession.close();
+        return productCategoryDto;
+    }
 }

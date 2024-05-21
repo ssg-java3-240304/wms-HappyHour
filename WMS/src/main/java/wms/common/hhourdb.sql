@@ -1,3 +1,47 @@
+
+
+
+
+use happyhourdb;
+select sum(amount)
+from
+    inventory inven
+        join warehouse_section ws on inven.section_no = ws.section_no
+        join
+    warehouse_zone wz on ws.section_no = wz.zone_no
+where
+    category_no = 3
+group by
+    ws.section_no;
+
+select *
+from warehouse_zone;
+
+select count(zone_no)*1000
+from warehouse_section_space join warehouse_section ws on warehouse_section_space.section_no = ws.section_no
+where category_no=3
+group by ws.section_no limit 1;
+
+
+select sum(amount) 현재재고
+from inventory inven join warehouse_section ws on inven.section_no = ws.section_no
+where category_no = #{cae}
+group by ws.section_no;
+
+select *
+from warehouse_section;
+
+
+
+
+
+
+
+
+
+
+
+
 -- 테이블 삭제
 drop table if exists receipt_product cascade;
 drop table if exists receipt_log cascade;
@@ -166,8 +210,9 @@ create table if not exists inventory (
                                          amount int not null comment '수량',
                                          constraint pk_section_no_product_no primary key(section_no, product_no),
                                          constraint fk_inventory_section_no foreign key (section_no) references warehouse_section (section_no),
-                                         constraint fk_inventory_product_no foreign key (product_no) references product (product_no),
-                                         constraint ck_inventory_amount check (amount > 0)
+                                         constraint fk_inventory_product_no foreign key (product_no) references product (product_no)
+                                            on update cascade on delete cascade,
+                                         constraint ck_inventory_amount check (amount >= 0)
 ) engine=innodb comment '재고';
 
 create table if not exists delivery_vehicle (
@@ -241,10 +286,10 @@ create table if not exists receipt_product (
 
 create table if not exists delivery_dispatch_outbound(
                                             dispatch_no int comment '배차번호',
-                                            inbound_no int comment '수주번호',
-                                            constraint pk_receipt_no_inbound_no primary key(dispatch_no),
+                                            outbound_no int comment '수주번호',
+                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no, outbound_no),
                                             constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                            constraint delivery_dispatch_outbound_inbound_no foreign key (inbound_no) references inbound (inbound_no)
+                                            constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
 ) engine=innodb comment '배차수주';
 
 -- 데이터 삽입

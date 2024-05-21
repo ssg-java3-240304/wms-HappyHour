@@ -5,7 +5,15 @@
 <mapper namespace="wms.menu.model.dao.ProductMapper">
     <select id="findAll" resultType="productDto">
         select
-            *
+            p.product_no,
+            product_name,
+            product_price,
+            category_no,
+            manufacturer_no,
+            alcohol_volume,
+            capacity,
+            cargo_space,
+            orderable_status
         from
             product p left join inbound_orderable ino
                 on p.product_no = ino.product_no
@@ -18,14 +26,20 @@
     </select>
     <select id="findByNo" resultType="productDto">
         select
-            *
+            p.product_no,
+            product_name,
+            product_price,
+            category_no,
+            manufacturer_no,
+            alcohol_volume,
+            capacity,
+            cargo_space,
+            orderable_status
         from
-            product
-        <where>
-            <if test="productNo > 0">
-                product_no = #{productNo}
-            </if>
-        </where>
+            product p left join inbound_orderable ino
+                on p.product_no = ino.product_no
+        where
+            p.product_no = #{productNo}
     </select>
     <delete id="deleteProduct">
         delete from product where product_no = #{productNo}
@@ -38,6 +52,14 @@
         (
             #{productName}, #{productPrice}, #{categoryNo}, #{manufacturerNo},
             #{alcoholVolume}, #{capacity}, #{cargoSpace}
+        )
+    </insert>
+    <insert id="insertProductToInboundOrderable">
+        insert into
+        inbound_orderable
+        values
+        (
+        #{productNo}, #{orderableStatus}, 2
         )
     </insert>
     <update id="updateProduct">

@@ -18,18 +18,20 @@
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <!--아직 menudb같은 공간을 만들지 않아 3306/스키마 이름을 써야 합니다-->
+                <!--techbrew 저장소 아이디 비밀번호-->
                 <property name="url" value="jdbc:mysql://techbrew4.iptime.org:3306/happyhourdb"/>
                 <property name="username" value="hhdb"/>
                 <property name="password" value="hhdb"/>
           </dataSource>
+
         </environment>
     </environments>
     <mappers>
-
-<!--        이 공간에 mapper 즉 DAO에 적용시킬 각 행동의 xml를 아래 처럼 쓸 공간입니다-->
         <mapper resource="sql/product/product-mapper.xml"/>
         <mapper resource="sql/product/category/product-category-mapper.xml"/>
         <mapper resource="sql/delivery/delivery-mapper.xml"/>
+        <mapper resource="sql/inboundorder/inboundorder-mapper.xml"/>
+        <mapper resource="sql/inboundorder/receiptproductlog-mapper.xml"/>
         <mapper resource="sql/inventory/inventory-mapper.xml"/>
         <mapper resource="sql/warehouse/warehouse-mapper.xml"/>
         <mapper resource="sql/inoutbound/inbound-mapper.xml"/>

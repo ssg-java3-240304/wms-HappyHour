@@ -17,4 +17,6 @@ public interface ProductCategoryMapper {
 
     // 상품 카테고리 수정
     int updateProductCategory(ProductCategoryDto productCategoryDto);
+
+    ProductCategoryDto findByCategoryNo(int categoryNo);
 }
