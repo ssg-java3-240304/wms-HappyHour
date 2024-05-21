@@ -18,21 +18,26 @@ public class NewMainMenuView {
                         4. 재고 x
                         5. 창고 x
                         6. 입출고 내역 o
-                        7. 배송 x
+                        7. 배송 O
+                        0. 종료
                         """;
-        System.out.printf(menu);
-        System.out.printf("메뉴를 입력해주세요 : ");
-        choice=sc.nextInt();
+        while(true) {
+            System.out.print(menu);
+            System.out.print("메뉴를 입력해주세요 : ");
+            choice = sc.nextInt();
 
-        switch (choice)
-        {
-            //case 1->new InboundManagementView().InboundManagementMenu();
-            case 2->new InboundMenuView().InboundMenu();
-            case 3->new ProductView().productMainMenu();
-            //case 4->new ProductView().productMainMenu();
-            //case 5->new ProductView().productMainMenu();
-            case 6->new InOutboundView().inOutboundView();
-            //case 7->new ProductView().productMainMenu();
+            switch (choice) {
+                //case 1->new InboundManagementView().InboundManagementMenu();
+                case 2 -> new InboundMenuView().InboundMenu();
+                case 3 -> new ProductView().productMainMenu();
+                //case 4->new ProductView().productMainMenu();
+                //case 5->new ProductView().productMainMenu();
+                case 6 -> new InOutboundView().inOutboundView();
+                case 7 -> new DeliveryView().deliveryMenu();
+                case 0 -> {
+                    return;
+                }
+            }
         }
     }
 }

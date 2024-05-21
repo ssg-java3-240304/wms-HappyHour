@@ -43,7 +43,7 @@ public class InboundMenuView {
                 case "2" : inboundManagementController.inboundOrderList();
 
                     // 메인 메뉴로 가기
-                case "0" : mainMenuController.mainMenuView();
+                case "0" : return;
 
                 default:
                     System.out.printf("잘못된 메뉴 번호입니다 : %s\n",choice);
