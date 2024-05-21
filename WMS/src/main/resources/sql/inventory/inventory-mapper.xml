@@ -41,11 +41,24 @@
                 left join product p using (product_no)
         order by product_name
     </select>
-    <!-- 재고 이동 -->
-    <update id="moveInventory">
+    <!-- 재고 삽입 -->
+    <insert id="insertInventory">
+        insert into inventory
+        values (#{sectionNo}, #{productNo}, #{amount})
+        on duplicate key update
+            amount = amount + values (amount)
+    </insert>
+    <!-- 재고 업데이트 -->
+    <update id="updateInventory">
         update inventory
-        set section_no = #{toSectionNo}
-        where product_no = #{productNo}
-          and section_no = #{fromSectionNo}
+        set amount = #{amount}
+        where section_no = #{sectionNo}
+          and product_no = #{productNo}
     </update>
+    <!-- 재고 삭제 -->
+    <delete id="deleteInventory">
+        delete from inventory
+        where section_no = #{sectionNo}
+          and product_no = #{productNo}
+    </delete>
 </mapper>

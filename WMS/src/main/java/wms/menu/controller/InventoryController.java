@@ -24,9 +24,21 @@ public class InventoryController {
         return list;
     }
 
-    public void moveInventory(int productNo, int fromSectionNo, int toSectionNo) {
+    public void moveInventory(InventoryDto inventory, int moveAmount, int toSectionNo) {
         try {
-            int result = inventoryService.moveInventory(productNo, fromSectionNo, toSectionNo);
+            int result = 0;
+            int productNo = inventory.getProductNo();
+            int inventoryAmount = inventory.getAmount();
+            int fromSectionNo = inventory.getSectionNo();
+            result += inventoryService.insertInventory(productNo, moveAmount, toSectionNo);
+            System.out.println(result);
+            if (inventoryAmount != moveAmount) {
+                result += inventoryService.updateInventory(productNo, inventoryAmount - moveAmount, fromSectionNo);
+                System.out.println(result);
+            } else {
+                result += inventoryService.deleteInventory(productNo, fromSectionNo);
+            }
+            result = result >= 2 ? result : 0;
             InventoryResultView.moveInventory("재고 이동", result);
         } catch (Exception e) {
             ErrorView.displayError(ErrorCode.MOVE_INVENTORY_ERROR);

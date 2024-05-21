@@ -28,11 +28,41 @@ public class InventoryService {
         return list;
     }
 
-    public int moveInventory(int productNo, int fromSectionNo, int toSectionNo) {
+    public int updateInventory(int productNo, int amount, int sectionNo) {
         SqlSession sqlSession = getSqlSession();
         InventoryMapper mapper = sqlSession.getMapper(InventoryMapper.class);
         try {
-            int result = mapper.moveInventory(productNo, fromSectionNo, toSectionNo);
+            int result = mapper.updateInventory(sectionNo, productNo, amount);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public int insertInventory(int productNo, int amount, int sectionNo) {
+        SqlSession sqlSession = getSqlSession();
+        InventoryMapper mapper = sqlSession.getMapper(InventoryMapper.class);
+        try {
+            int result = mapper.insertInventory(sectionNo, productNo, amount);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public int deleteInventory(int productNo, int sectionNo) {
+        SqlSession sqlSession = getSqlSession();
+        InventoryMapper mapper = sqlSession.getMapper(InventoryMapper.class);
+        try {
+            int result = mapper.deleteInventory(sectionNo, productNo);
             sqlSession.commit();
             return result;
         } catch (Exception e) {
