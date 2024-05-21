@@ -51,11 +51,11 @@ public class ProductView {
             System.out.print(menu);
             String choice = sc.next();
             switch (choice) {
-                case "1" -> productController.productManage(showProductManage());
+                case "1" -> showProductManage();
                 case "2" -> productCategoryController.productCategoryManage(showProductCategoryManage());
                 case "0" -> 
                     mainMenuController.mainMenuView();
-                default ->{
+                default ->
 //                    if (!choice.equals("1") && !choice.equals("2") && !choice.equals("0"))
                         System.out.println("잘못 입력하셨습니다.");
 

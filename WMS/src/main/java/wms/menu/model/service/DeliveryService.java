@@ -191,11 +191,8 @@ public class DeliveryService {
         for(InventoryDto inven : inventoryList){
             InventoryDto copy = new InventoryDto();
             copy.setProductNo(inven.getProductNo());
-            copy.setProductName(inven.getProductName());
             copy.setAmount(inven.getAmount());
-            copy.setCargoSpace(inven.getCargoSpace());
             copy.setSectionNo(inven.getSectionNo());
-            copy.setSectionName(inven.getSectionName());
             copiedList.add(copy);
         }
 
