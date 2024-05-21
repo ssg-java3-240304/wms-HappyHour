@@ -28,29 +28,6 @@
             product_no;
     </select>
 
-
-    <select id="findDispatchLog" resultMap="DeliveryDtoMap">
-        select
-        *
-        from
-        delivery_dispatch_log a join delivery_dispatch_product b on a.dispatch_no = b.dispatch_no;
-    </select>
-    <resultMap id="DeliveryDtoMap" type="DeliveryDto">
-        <id column = "dispatch_no" property="dispatchNo"/>
-        <result column="date" property="localDateTime"/>
-
-        <association property="vehicleDto" javaType="VehicleDto">
-            <id column="registration_no" property="registrationNo"/>
-        </association>
-
-<!--        <collection property="outboundList" ofType="OutboundDtoForDeploy">-->
-<!--            <id column="product_no" property="productNo"/>-->
-<!--            &lt;!&ndash;            <id column="outbound_no" property="outboundNo"/>&ndash;&gt;-->
-<!--            <result column="amount" property="amount"/>-->
-<!--        </collection>-->
-    </resultMap>
-
-
     <select id="findAllPendingOutbound" resultMap="OutboundDtoForDeployMap">
         select
             *,
@@ -134,6 +111,16 @@
     </update>
 
 
+    <update id="updateOutboundStatus">
+        update
+            outbound
+        set
+            outbound_status = #{outboundStatus}
+        where
+            outbound_no = #{outboundNo}
+    </update>
+
+
     <insert id="insertOutboundLog" useGeneratedKeys="true" keyProperty="dispatchNo">
         INSERT INTO
             dispatch_log (date)
@@ -144,10 +131,29 @@
 
     <insert id="insertOutboundProductLog">
         INSERT INTO
-            dispatch_product (dispatch_no, outbound_no, product_no, amount)
+            dispatch_product (dispatch_no, product_no, amount)
         VALUES
-            (#{dispatchLog.dispatchNo}, #{dispatchLog.outboundNo}, #{dispatchLog.productName}, #{dispatchLog.amount})
+            (#{dispatchNo}, #{productNo}, #{amount})
     </insert>
 
+    <select id="findAllDeploy" resultMap="DeliveryDtoMap2">
+        select
+            *
+        from
+            delivery_dispatch_log a join delivery_dispatch_outbound b
+                on a.dispatch_no = b.dispatch_no;
+    </select>
+    <resultMap id="DeliveryDtoMap2" type="DeliveryDto">
+        <id column = "dispatch_no" property="dispatchNo"/>
+        <result column="date" property="localDateTime"/>
+
+        <association property="vehicleDto" javaType="VehicleDto">
+            <id column="registration_no" property="registrationNo"/>
+        </association>
+
+        <collection property="outboundList" ofType="OutboundDtoForDeploy">
+            <id column="outbound_no" property="outboundNo"/>
+        </collection>
+    </resultMap>
 
 </mapper>

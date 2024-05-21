@@ -139,9 +139,6 @@ class DeliveryMapperTest {
         //when
         deliveryMapper.insertDispatchLog(deliveryDto);
         //then
-        List<DeliveryDto> list = deliveryMapper.findDispatchLog();
-//        System.out.println(list);
-        list.stream().forEach(System.out::println);
 
     }
 

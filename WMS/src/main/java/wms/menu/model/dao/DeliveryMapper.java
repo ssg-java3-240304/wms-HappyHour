@@ -16,8 +16,6 @@ public interface DeliveryMapper {
 
     int insertDispatchLog(DeliveryDto deliveryDto);
 
-    List<DeliveryDto> findDispatchLog();
-
     int insertDispatchOutbound(@Param("dispatchNo") int dispatchNo, @Param("outboundNo") int outboundNo);
 
 
@@ -32,4 +30,9 @@ public interface DeliveryMapper {
     void insertOutboundLog(DispatchDto dispatchLog);
 
     void insertOutboundProductLog(DispatchDto dispatchLog);
+
+    List<DeliveryDto> findAllDeploy();
+
+
+    void updateOutboundStatus(OutboundDtoForDeploy outbound);
 }

@@ -26,4 +26,9 @@ public class DeliveryController {
         DeliveryDto deliveryDto = deliveryService.deploySingleVehicle();
         DeliveryResultView.deploySingleVehicle(deliveryDto);
     }
+
+    public void findAllDeployList() {
+            List<DeliveryDto> deliveryDtoList = deliveryService.findAllDeployList();
+            DeliveryResultView.showAllDeployList(deliveryDtoList);
+    }
 }
