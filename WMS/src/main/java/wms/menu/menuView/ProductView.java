@@ -7,6 +7,7 @@ import wms.menu.model.dto.ProductCategoryDto;
 import wms.menu.model.dto.ProductDto;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class ProductView {
@@ -49,15 +50,12 @@ public class ProductView {
             System.out.print(menu);
             String choice = sc.next();
             switch (choice) {
-                case "1" -> productController.productManage(showProductManage());
-                case "2" -> productCategoryController.productCategoryManage(showProductCategoryManage());
-                case "0" -> {
-                    return;
-                }
-                default ->{
-//                    if (!choice.equals("1") && !choice.equals("2") && !choice.equals("0"))
+                case "1" -> showProductManage();
+                case "2" -> showProductCategoryManage();
+                case "0" -> {return;}
+                default ->
                         System.out.println("잘못 입력하셨습니다.");
-                }
+
             }
         }
     }
@@ -81,7 +79,7 @@ public class ProductView {
                 case "1" : productController.insertProduct(inputProduct()); break;
                 case "2" : productController.deleteProduct(inputProductNo("삭제")); break;
                 case "3" : productController.updateProduct(inputProductUpdate()); break;
-                case "0" : productMainMenu();
+                case "0" : return null;
                 default:
                     System.out.println("잘못 입력하셨습니다.");
             }
@@ -90,6 +88,11 @@ public class ProductView {
 
     // 상품 수정
     private ProductDto inputProductUpdate() {
+        int productPrice;
+        int categoryNo;
+        int inputCategoryNo;
+        int inputManufacturer;
+        int manufacturer;
         // 전체 상품 조회
         List<ProductDto> list = displayProductList();
 
@@ -119,15 +122,80 @@ public class ProductView {
         } while (chosenProduct == null);
 
         System.out.println("> 수정할 상품정보를 작성해주세요");
+        System.out.println("💣💣💣상품 등록 중 종료하시려면 0을 작성해주세요💣💣💣");
         System.out.print("> 상품명 : ");
         String productName = sc.next();
-        System.out.print("> 상품 가격 : ");
-        int productPrice = sc.nextInt();
-        System.out.print("> 상품 카테고리 번호 : ");
-        int categoryNo = sc.nextInt();
-        System.out.print("> 제조사 : ");
-        int manufacturerNo = sc.nextInt();
-        return new ProductDto(productNo, productName, productPrice, categoryNo, manufacturerNo);
+        if(Objects.equals(productName, "0")) {
+            System.out.println("입력을 종료합니다.");
+            return showProductManage();
+        }
+
+        while (true) {
+            try {
+                System.out.print("> 상품 가격 : ");
+                productPrice = sc.nextInt();
+                if(productPrice == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
+                if (productPrice > 0) {
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수를 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+        while (true) {
+            try {
+                System.out.print("> 상품 카테고리 번호 : ");
+                inputCategoryNo = sc.nextInt();
+                if(inputCategoryNo == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
+                int finalCategoryNo = inputCategoryNo;
+                boolean isValid = list.stream()
+                        .anyMatch(l -> l.getCategoryNo() == finalCategoryNo);
+                if(isValid) {
+                    categoryNo = inputCategoryNo;
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+
+        List<ManufacturerDto> manufacturerFindAll = productController.findManufacturers();
+        while (true) {
+            try {
+                System.out.print("> 제조사 : ");
+                inputManufacturer = sc.nextInt();
+                if(inputManufacturer == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
+                // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
+                int finalInputManufacturer = inputManufacturer;
+                boolean isValid = manufacturerFindAll.stream()
+                        .anyMatch(m -> m.getManufacturerNo() == finalInputManufacturer);
+                if (isValid) {
+                    manufacturer = inputManufacturer;
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+        return new ProductDto(productNo, productName, productPrice, categoryNo, manufacturer);
     }
 
     private void displayFindByNo(int productNo) {
@@ -153,14 +221,23 @@ public class ProductView {
         String orderableStatus;
 
         System.out.println("> 등록할 상품정보를 작성해주세요.");
+        System.out.println("💣💣💣상품 등록 중 종료하시려면 0을 작성해주세요💣💣💣");
         System.out.print("> 상품명 : ");
         sc.nextLine();
         productName = sc.nextLine();
+        if(Objects.equals(productName, "0")) {
+            System.out.println("입력을 종료합니다.");
+            return showProductManage();
+        }
 
         while (true) {
             try {
                 System.out.print("> 상품 가격 : ");
                 productPrice = sc.nextInt();
+                if(productPrice == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 if (productPrice > 0) {
                     break;
                 } else {
@@ -178,11 +255,15 @@ public class ProductView {
         while (true) {
             try {
                 System.out.print("> 상품 카테고리 번호 : ");
-                int inputProductCategory = sc.nextInt();
+                int inputCategoryNo = sc.nextInt();
+                if(inputCategoryNo == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 boolean isValid = list.stream()
-                        .anyMatch(l -> l.getCategoryNo() == inputProductCategory);
+                        .anyMatch(l -> l.getCategoryNo() == inputCategoryNo);
                 if(isValid) {
-                    categoryNo = inputProductCategory;
+                    categoryNo = inputCategoryNo;
                     break;
                 } else {
                     System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
@@ -202,6 +283,10 @@ public class ProductView {
             try {
                 System.out.print("> 제조사 : ");
                 int inputManufacturer = sc.nextInt();
+                if(inputManufacturer == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
                 boolean isValid = manufacturerFindAll.stream()
                         .anyMatch(m -> m.getManufacturerNo() == inputManufacturer);
@@ -223,6 +308,10 @@ public class ProductView {
             try {
                 System.out.print("> 도수 : ");
                 alcoholVolume = sc.nextDouble();
+                if(alcoholVolume == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 if (alcoholVolume > 0) {
                     break;
                 } else {
@@ -237,6 +326,10 @@ public class ProductView {
             try {
                 System.out.print("> 용량 : ");
                 capacity = sc.nextInt();
+                if(capacity == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 if (capacity > 0) {
                     break;
                 } else {
@@ -251,6 +344,10 @@ public class ProductView {
             try {
                 System.out.print("> 적재공간 : ");
                 cargoSpace = sc.nextInt();
+                if(cargoSpace == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductManage();
+                }
                 if (cargoSpace > 0) {
                     break;
                 } else {
@@ -264,6 +361,10 @@ public class ProductView {
         while (true){
             System.out.print("> 주문 가능 여부(Y/N) : ");
             orderableStatus = sc.next().toUpperCase();
+            if(orderableStatus.equalsIgnoreCase("0")) {
+                System.out.println("입력을 종료합니다.");
+                return showProductManage();
+            }
             if (orderableStatus.equals("Y") || orderableStatus.equals("N")){
                 break;
             } else {
@@ -312,7 +413,7 @@ public class ProductView {
                 case "1" : productCategoryController.insertProductCategory(inputProductCategory()); break;
                 case "2" : productCategoryController.deleteProductCategory(inputProductCategoryNo("삭제")); break;
                 case "3" : productCategoryController.updateProductCategory(inputProductCategoryUpdate()); break;
-                case "0" : productMainMenu();
+                case "0" : return null;
                 default:
                     System.out.println("잘못 입력하셨습니다.");
             }
@@ -330,6 +431,7 @@ public class ProductView {
         // 유효한 카테고리 번호 입력받기
         do {
             System.out.println("> 수정할 상품 카테고리 번호를 작성해주세요");
+            System.out.println("💣💣💣상품 등록 중 종료하시려면 0을 작성해주세요💣💣💣");
             categoryNo = sc.nextInt();
                 // 수정할 카테고리 번호 입력했을 때, 입력한 값의 리스트만 조회
             displayFindByCategoryNo(categoryNo);
@@ -348,6 +450,10 @@ public class ProductView {
         System.out.print("> 수정할 상품 카테고리명 : ");
         sc.nextLine();
         String categoryName = sc.next();
+        if(Objects.equals(categoryName, "0")) {
+            System.out.println("입력을 종료합니다.");
+            return showProductCategoryManage();
+        }
         return new ProductCategoryDto(categoryNo, categoryName);
     }
 
@@ -363,11 +469,44 @@ public class ProductView {
 
     // 상품 카테고리 등록
     private ProductCategoryDto inputProductCategory() {
+        int categoryNo;
+        String categoryName;
+
         System.out.println("> 등록할 상품 카테고리 정보를 작성해주세요.");
-        System.out.println("> 상품 카테고리 번호 : ");
-        int categoryNo = sc.nextInt();
+        System.out.println("💣💣💣상품 등록 중 종료하시려면 0을 작성해주세요💣💣💣");
+
+        // 상품 카테고리 전체 조회
+        List<ProductCategoryDto> list = productCategoryController.findAll();
+        // 사용자가 없는 번호를 입력했을 때 어떻게 할지 생각하고 코드 작성
+        while (true) {
+            try {
+                System.out.print("> 상품 카테고리 번호 : ");
+                int inputCategoryNo = sc.nextInt();
+                if(inputCategoryNo == 0) {
+                    System.out.println("입력을 종료합니다.");
+                    return showProductCategoryManage();
+                }
+                boolean isValid = list.stream()
+                        .anyMatch(l -> l.getCategoryNo() == inputCategoryNo);
+                if(isValid) {
+                    categoryNo = inputCategoryNo;
+                    break;
+                } else {
+                    System.out.println("잘못된 숫자를 입력하셨습니다. 양의 정수 입력해주세요.");
+                }
+            } catch (Exception e) {
+                sc.nextLine();
+                System.out.println("숫자가 아닌 값을 입력하셨습니다. 양의 정수를 입력해주세요.");
+            }
+        }
+
         System.out.print("> 상품 카테고리명 : ");
-        String categoryName = sc.next();
+        categoryName = sc.nextLine();
+        if(Objects.equals(categoryName, "0")) {
+            System.out.println("입력을 종료합니다.");
+            return showProductCategoryManage();
+        }
         return new ProductCategoryDto(categoryNo, categoryName);
     }
+
 }
