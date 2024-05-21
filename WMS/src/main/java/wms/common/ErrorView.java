@@ -5,7 +5,6 @@ import wms.menu.menuView.InboundMenuView;
 import wms.menu.model.dto.InboundOrderDto;
 
 public class ErrorView {
-
     public static void displayError(ErrorCode errorCode) {
         System.out.println(errorCode);
 

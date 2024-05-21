@@ -12,9 +12,12 @@ public enum ErrorCode {
 
     // 전현선 작업 시작
     DELETE_PRODUCT_ERROR("상품 삭제 중 오류가 발생했습니다."),
-    UPDATE_PRODUCT_ERROR("상품 수정 중 오류가 발생했습니다.");
+    UPDATE_PRODUCT_ERROR("상품 수정 중 오류가 발생했습니다."),
     // 전현선 작업 끝
 
+    // 연찬 시작
+    MOVE_INVENTORY_ERROR("재고 이동 중 오류가 발생했습니다.");
+    // 연찬 끝
     @Getter
     final String msg;
 
