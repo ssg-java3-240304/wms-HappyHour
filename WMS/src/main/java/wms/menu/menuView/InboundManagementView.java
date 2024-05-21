@@ -27,7 +27,7 @@ public class InboundManagementView {
                 ----------------발주---------------- 
                  1. 발주 신청(+발주 가능 상품 목록 출력)
                  2. 발주 내역
-                 3. 나가기 (뒤로 가기 느낌으로)
+                 0. 나가기 (뒤로 가기 느낌으로)
                  메뉴 번호를 입력 해주세요 : """;
         System.out.printf(menu);
         choice = sc.next();
@@ -41,7 +41,7 @@ public class InboundManagementView {
                 case "2" : inboundManagementController.inboundOrderList();
 
                     // 메인 메뉴로 가기
-                case "3" : return;
+                case "0" : return;
                 default:
                     System.out.printf("잘못된 메뉴 번호입니다 : %s\n",choice);
             }
