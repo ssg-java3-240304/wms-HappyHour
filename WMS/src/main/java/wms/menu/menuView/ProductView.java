@@ -1,6 +1,5 @@
 package wms.menu.menuView;
 
-import wms.menu.controller.MainMenuController;
 import wms.menu.controller.ProductCategoryController;
 import wms.menu.controller.ProductController;
 import wms.menu.model.dto.ManufacturerDto;
@@ -37,26 +36,24 @@ public class ProductView {
     private Scanner sc = new Scanner(System.in);
     private ProductController productController = new ProductController();
     private ProductCategoryController productCategoryController = new ProductCategoryController();
-    private MainMenuController mainMenuController=new MainMenuController();
+
     // 상품 관리 화면
     public void productMainMenu() {
         String menu = """
                 =======================
                 1. 상품 관리
                 2. 상품 카테고리 관리
-                0. 메인 메뉴
+                0. 나가기
                 =======================
                 입력 : """;
         while(true) {
             System.out.print(menu);
             String choice = sc.next();
             switch (choice) {
-                case "1" -> productController.productManage(showProductManage());
-                case "2" -> productCategoryController.productCategoryManage(showProductCategoryManage());
-                case "0" -> 
-                    mainMenuController.mainMenuView();
-                default ->{
-//                    if (!choice.equals("1") && !choice.equals("2") && !choice.equals("0"))
+                case "1" -> showProductManage();
+                case "2" -> showProductCategoryManage();
+                case "0" -> {return;}
+                default ->
                         System.out.println("잘못 입력하셨습니다.");
 
             }

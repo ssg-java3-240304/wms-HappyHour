@@ -1,47 +1,3 @@
-
-
-
-
-use happyhourdb;
-select sum(amount)
-from
-    inventory inven
-        join warehouse_section ws on inven.section_no = ws.section_no
-        join
-    warehouse_zone wz on ws.section_no = wz.zone_no
-where
-    category_no = 3
-group by
-    ws.section_no;
-
-select *
-from warehouse_zone;
-
-select count(zone_no)*1000
-from warehouse_section_space join warehouse_section ws on warehouse_section_space.section_no = ws.section_no
-where category_no=3
-group by ws.section_no limit 1;
-
-
-select sum(amount) 현재재고
-from inventory inven join warehouse_section ws on inven.section_no = ws.section_no
-where category_no = #{cae}
-group by ws.section_no;
-
-select *
-from warehouse_section;
-
-
-
-
-
-
-
-
-
-
-
-
 -- 테이블 삭제
 drop table if exists receipt_product cascade;
 drop table if exists receipt_log cascade;
@@ -67,109 +23,119 @@ drop table if exists admin cascade;
 drop table if exists franchise cascade;
 
 -- 테이블 생성
-create table if not exists admin (
-                                     admin_no int auto_increment comment '관리자번호',
-                                     admin_id varchar(10) not null comment '아이디',
-                                     admin_pw varchar(10) not null comment '비밀번호',
-                                     constraint pk_admin_no primary key(admin_no),
-                                     constraint uq_admin_id unique(admin_id)
+create table if not exists admin
+(
+    admin_no int auto_increment comment '관리자번호',
+    admin_id varchar(10) not null comment '아이디',
+    admin_pw varchar(10) not null comment '비밀번호',
+    constraint pk_admin_no primary key(admin_no),
+    constraint uq_admin_id unique(admin_id)
 ) engine=innodb comment '관리자';
 
-create table if not exists franchise (
-                                         franchise_no int auto_increment comment '지점번호',
-                                         franchise_name varchar(10) not null comment '지점명',
-                                         address varchar(100) comment '주소',
-                                         phone varchar(20) comment '전화번호',
-                                         constraint pk_franchise_no primary key(franchise_no),
-                                         constraint uq_franchise_name unique(franchise_name)
+create table if not exists franchise
+(
+    franchise_no int auto_increment comment '지점번호',
+    franchise_name varchar(10) not null comment '지점명',
+    address varchar(100) comment '주소',
+    phone varchar(20) comment '전화번호',
+    constraint pk_franchise_no primary key(franchise_no),
+    constraint uq_franchise_name unique(franchise_name)
 ) engine=innodb comment '지점';
 
-create table if not exists category (
-                                        category_no int auto_increment comment '카테고리번호',
-                                        category_name varchar(10) not null comment '카테고리명',
-                                        constraint pk_category_no primary key(category_no),
-                                        constraint uq_category_name unique(category_name)
+create table if not exists category
+(
+    category_no int auto_increment comment '카테고리번호',
+    category_name varchar(10) not null comment '카테고리명',
+    constraint pk_category_no primary key(category_no),
+    constraint uq_category_name unique(category_name)
 ) engine=innodb comment '카테고리';
 
-create table if not exists manufacturer (
-                                            manufacturer_no int auto_increment comment '제조사번호',
-                                            manufacturer_name varchar(20) not null comment '제조사명',
-                                            address varchar(100) comment '주소',
-                                            phone varchar(20) comment '전화번호',
-                                            constraint pk_manufacturer_no primary key(manufacturer_no),
-                                            constraint uq_manufacturer_name unique(manufacturer_name)
+create table if not exists manufacturer
+(
+    manufacturer_no int auto_increment comment '제조사번호',
+    manufacturer_name varchar(20) not null comment '제조사명',
+    address varchar(100) comment '주소',
+    phone varchar(20) comment '전화번호',
+    constraint pk_manufacturer_no primary key(manufacturer_no),
+    constraint uq_manufacturer_name unique(manufacturer_name)
 ) engine=innodb comment '제조사';
 
-create table if not exists product (
-                                       product_no int auto_increment comment '상품번호',
-                                       product_name varchar(20) not null comment '상품명',
-                                       product_price int not null comment '상품가격',
-                                       category_no int not null comment '카테고리번호',
-                                       manufacturer_no int not null comment '제조사번호',
-                                       alcohol_volume double not null comment '도수',
-                                       capacity int not null comment '용량',
-                                       cargo_space int not null comment '단위당 적재 면적',
-                                       constraint pk_product_no primary key(product_no),
-                                       constraint uq_product_name unique(product_name),
-                                       constraint fk_product_category_no foreign key (category_no) references category (category_no),
-                                       constraint fk_product_manufacturer_no foreign key(manufacturer_no) references manufacturer (manufacturer_no),
-                                       constraint ck_product_cargo_space check (cargo_space > 0)
+create table if not exists product
+(
+    product_no int auto_increment comment '상품번호',
+    product_name varchar(20) not null comment '상품명',
+    product_price int not null comment '상품가격',
+    category_no int not null comment '카테고리번호',
+    manufacturer_no int not null comment '제조사번호',
+    alcohol_volume double not null comment '도수',
+    capacity int not null comment '용량',
+    cargo_space int not null comment '단위당 적재 면적',
+    constraint pk_product_no primary key(product_no),
+    constraint uq_product_name unique(product_name),
+    constraint fk_product_category_no foreign key (category_no) references category (category_no),
+    constraint fk_product_manufacturer_no foreign key(manufacturer_no) references manufacturer (manufacturer_no),
+    constraint ck_product_cargo_space check (cargo_space > 0)
 ) engine=innodb comment '상품';
 
 alter table product auto_increment = 60001;
 
-create table if not exists inbound_orderable (
-                                                 product_no int comment '상품번호',
-                                                 orderable_status char(1) not null comment '주문가능여부',
-                                                 inbound_quantity int not null comment '발주단위',
-                                                 constraint pk_product_no primary key(product_no),
-                                                 constraint fk_inbound_orderable_product_no foreign key (product_no) references product (product_no),
-                                                 constraint ck_orderable_status check (binary orderable_status in ('Y', 'N')),
-                                                 constraint ck_inbound_quantity check (inbound_quantity > 0)
+create table if not exists inbound_orderable
+(
+    product_no int comment '상품번호',
+    orderable_status char(1) not null comment '주문가능여부',
+    inbound_quantity int not null comment '발주단위',
+    constraint pk_product_no primary key(product_no),
+    constraint fk_inbound_orderable_product_no foreign key (product_no) references product (product_no),
+    constraint ck_orderable_status check (binary orderable_status in ('Y', 'N')),
+    constraint ck_inbound_quantity check (inbound_quantity > 0)
 ) engine=innodb comment '발주 가능 상품';
 
-create table if not exists inbound (
-                                       inbound_no int auto_increment comment '발주번호',
-                                       manufacturer_no int not null comment '제조사번호',
-                                       date datetime default current_timestamp comment '발주일자',
-                                       inbound_status varchar(10) not null comment '발주상태',
-                                       constraint pk_inbound_no primary key(inbound_no),
-                                       constraint fk_inbound_manufacturer_no foreign key (manufacturer_no) references manufacturer (manufacturer_no),
-                                       constraint ck_inbound_status check (binary inbound_status in ('completed', 'pending', 'canceled'))
+create table if not exists inbound
+(
+    inbound_no int auto_increment comment '발주번호',
+    manufacturer_no int not null comment '제조사번호',
+    date datetime default current_timestamp comment '발주일자',
+    inbound_status varchar(10) not null comment '발주상태',
+    constraint pk_inbound_no primary key(inbound_no),
+    constraint fk_inbound_manufacturer_no foreign key (manufacturer_no) references manufacturer (manufacturer_no),
+    constraint ck_inbound_status check (binary inbound_status in ('completed', 'pending', 'canceled'))
 ) engine=innodb comment '발주';
 
 alter table inbound auto_increment = 1111;
 
-create table if not exists inbound_product (
-                                               inbound_no int comment '발주번호',
-                                               product_no int not null comment '상품번호',
-                                               amount int not null comment '수량',
-                                               constraint pk_inbound_no_product_no primary key(inbound_no, product_no),
-                                               constraint fk_inbound_product_inbound_no foreign key (inbound_no) references inbound (inbound_no),
-                                               constraint fk_inbound_product_product_no foreign key (product_no) references inbound_orderable (product_no),
-                                               constraint ck_inbound_product_amount check (amount > 0)
+create table if not exists inbound_product
+(
+    inbound_no int comment '발주번호',
+    product_no int not null comment '상품번호',
+    amount int not null comment '수량',
+    constraint pk_inbound_no_product_no primary key(inbound_no, product_no),
+    constraint fk_inbound_product_inbound_no foreign key (inbound_no) references inbound (inbound_no),
+    constraint fk_inbound_product_product_no foreign key (product_no) references inbound_orderable (product_no),
+    constraint ck_inbound_product_amount check (amount > 0)
 ) engine=innodb comment '발주_상품';
 
-create table if not exists outbound (
-                                        outbound_no int auto_increment comment '수주번호',
-                                        franchise_no int not null comment '지점번호',
-                                        date datetime default current_timestamp comment '수주일자',
-                                        outbound_status varchar(10) not null comment '수주상태',
-                                        constraint pk_outbound_no primary key(outbound_no),
-                                        constraint fk_outbound_franchise_no foreign key (franchise_no) references franchise (franchise_no),
-                                        constraint ck_outbound_status check (binary outbound_status in ('completed', 'preparing', 'canceled'))
+create table if not exists outbound
+(
+    outbound_no int auto_increment comment '수주번호',
+    franchise_no int not null comment '지점번호',
+    date datetime default current_timestamp comment '수주일자',
+    outbound_status varchar(10) not null comment '수주상태',
+    constraint pk_outbound_no primary key(outbound_no),
+    constraint fk_outbound_franchise_no foreign key (franchise_no) references franchise (franchise_no),
+    constraint ck_outbound_status check (binary outbound_status in ('completed', 'preparing', 'canceled'))
 ) engine=innodb comment '수주';
 
 alter table outbound auto_increment = 9990;
 
-create table if not exists outbound_product (
-                                                outbound_no int comment '수주번호',
-                                                product_no int comment '상품번호',
-                                                amount int not null comment '수량',
-                                                constraint pk_outbound_no_product_no primary key(outbound_no, product_no),
-                                                constraint fk_outbound_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
-                                                constraint fk_outbound_product_product_no foreign key (product_no) references product (product_no),
-                                                constraint ck_outbound_product_amount check (amount > 0)
+create table if not exists outbound_product
+(
+    outbound_no int comment '수주번호',
+    product_no int comment '상품번호',
+    amount int not null comment '수량',
+    constraint pk_outbound_no_product_no primary key(outbound_no, product_no),
+    constraint fk_outbound_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
+    constraint fk_outbound_product_product_no foreign key (product_no) references product (product_no),
+    constraint ck_outbound_product_amount check (amount > 0)
 ) engine=innodb comment '수주_상품';
 
 create table if not exists warehouse_section
@@ -204,92 +170,101 @@ create table if not exists warehouse_section_space
 
 alter table warehouse_zone auto_increment = 10;
 
-create table if not exists inventory (
-                                         section_no int comment '구역번호',
-                                         product_no int comment '상품번호',
-                                         amount int not null comment '수량',
-                                         constraint pk_section_no_product_no primary key(section_no, product_no),
-                                         constraint fk_inventory_section_no foreign key (section_no) references warehouse_section (section_no),
-                                         constraint fk_inventory_product_no foreign key (product_no) references product (product_no)
-                                            on update cascade on delete cascade,
-                                         constraint ck_inventory_amount check (amount >= 0)
+create table if not exists inventory
+(
+    section_no int comment '구역번호',
+    product_no int comment '상품번호',
+    amount int not null comment '수량',
+    constraint pk_section_no_product_no primary key(section_no, product_no),
+    constraint fk_inventory_section_no foreign key (section_no) references warehouse_section (section_no),
+    constraint fk_inventory_product_no foreign key (product_no) references product (product_no)
+    on update cascade on delete cascade,
+    constraint ck_inventory_amount check (amount >= 0)
 ) engine=innodb comment '재고';
 
-create table if not exists delivery_vehicle (
-                                                registration_no varchar(10) comment '차량번호',
-                                                vehicle_status varchar(10) not null comment '차량상태',
-                                                cargo_space int not null comment '적재공간',
-                                                constraint pk_registration_no primary key(registration_no),
-                                                constraint ck_delivery_vehicle_vehicle_status check (vehicle_status in ('배차전', '배차완료')),
-                                                constraint ck_delivery_vehicle_cargo_space check (cargo_space > 0)
+create table if not exists delivery_vehicle
+(
+    registration_no varchar(10) comment '차량번호',
+    vehicle_status varchar(10) not null comment '차량상태',
+    cargo_space int not null comment '적재공간',
+    constraint pk_registration_no primary key(registration_no),
+    constraint ck_delivery_vehicle_vehicle_status check (vehicle_status in ('배차전', '배차완료')),
+    constraint ck_delivery_vehicle_cargo_space check (cargo_space > 0)
 ) engine=innodb comment '차량';
 
-create table if not exists delivery_dispatch_log (
-                                                     dispatch_no int auto_increment comment '배차번호',
-                                                     registration_no varchar(10) not null comment '차량번호',
-                                                     date datetime default current_timestamp comment '배차일자',
-                                                     constraint pk_dispatch_no primary key(dispatch_no),
-                                                     constraint fk_delivery_dispatch_log_registration_no foreign key (registration_no) references delivery_vehicle (registration_no)
+create table if not exists delivery_dispatch_log
+(
+    dispatch_no int auto_increment comment '배차번호',
+    registration_no varchar(10) not null comment '차량번호',
+    date datetime default current_timestamp comment '배차일자',
+    constraint pk_dispatch_no primary key(dispatch_no),
+    constraint fk_delivery_dispatch_log_registration_no foreign key (registration_no) references delivery_vehicle (registration_no)
 ) engine=innodb comment '배차내역';
 
-create table if not exists delivery_dispatch_product (
-                                                         dispatch_no int comment '배차번호',
-                                                         product_no int comment '상품번호',
-                                                         amount int not null comment '수량',
-                                                         constraint pk_dispatch_no_product_no primary key(dispatch_no, product_no),
-                                                         constraint fk_delivery_dispatch_product_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                                         constraint fk_delivery_dispatch_product_product_no foreign key (product_no) references product (product_no),
-                                                         constraint ck_delivery_dispatch_product_amount check (amount > 0)
+create table if not exists delivery_dispatch_product
+(
+    dispatch_no int comment '배차번호',
+    product_no int comment '상품번호',
+    amount int not null comment '수량',
+    constraint pk_dispatch_no_product_no primary key(dispatch_no, product_no),
+    constraint fk_delivery_dispatch_product_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
+    constraint fk_delivery_dispatch_product_product_no foreign key (product_no) references product (product_no),
+    constraint ck_delivery_dispatch_product_amount check (amount > 0)
 ) engine=innodb comment '배차상품';
 
-create table if not exists dispatch_log (
-                                            dispatch_no int auto_increment comment '출고번호',
-                                            date datetime default current_timestamp comment '출고일자',
-                                            constraint pk_dispatch_no primary key(dispatch_no)
+create table if not exists dispatch_log
+(
+    dispatch_no int auto_increment comment '출고번호',
+    date datetime default current_timestamp comment '출고일자',
+    constraint pk_dispatch_no primary key(dispatch_no)
 ) engine=innodb comment '출고기록';
 
 alter table dispatch_log auto_increment = 81111;
 
-create table if not exists dispatch_product (
-                                                dispatch_no int comment '출고번호',
-                                                outbound_no int comment '수주번호',
-                                                product_no int not null comment '상품번호',
-                                                amount int not null comment '수량',
-                                                constraint pk_dispatch_no_outbound_no primary key(dispatch_no, outbound_no),
-                                                constraint fk_dispatch_product_dispatch_no foreign key (dispatch_no) references dispatch_log (dispatch_no),
-                                                constraint fk_dispatch_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
-                                                constraint fk_dispatch_product_product_no foreign key (product_no) references product (product_no),
-                                                constraint ck_dispatch_product_amount check (amount > 0)
+create table if not exists dispatch_product
+(
+    dispatch_no int comment '출고번호',
+    outbound_no int comment '수주번호',
+    product_no int not null comment '상품번호',
+    amount int not null comment '수량',
+    constraint pk_dispatch_no_outbound_no primary key(dispatch_no, outbound_no),
+    constraint fk_dispatch_product_dispatch_no foreign key (dispatch_no) references dispatch_log (dispatch_no),
+    constraint fk_dispatch_product_outbound_no foreign key (outbound_no) references outbound (outbound_no),
+    constraint fk_dispatch_product_product_no foreign key (product_no) references product (product_no),
+    constraint ck_dispatch_product_amount check (amount > 0)
 ) engine=innodb comment '출고상품';
 
-create table if not exists receipt_log (
-                                           receipt_no int auto_increment comment '입고번호',
-                                           date datetime default current_timestamp comment '입고일자',
-                                           constraint pk_receipt_no primary key(receipt_no)
+create table if not exists receipt_log
+(
+    receipt_no int auto_increment comment '입고번호',
+    date datetime default current_timestamp comment '입고일자',
+    constraint pk_receipt_no primary key(receipt_no)
 ) engine=innodb comment '입고기록';
 
 alter table receipt_log auto_increment = 21111;
 
-create table if not exists receipt_product (
-                                               receipt_no int comment '입고번호',
-                                               inbound_no int comment '발주번호',
-                                               product_no int not null comment '상품번호',
-                                               amount int not null comment '수량',
-                                               cargo_space int not null comment '상품 적재공간',
-                                               constraint pk_receipt_no_inbound_no primary key(receipt_no, inbound_no),
-                                               constraint fk_receipt_product_receipt_no foreign key (receipt_no) references receipt_log (receipt_no),
-                                               constraint fk_receipt_product_inbound_no foreign key (inbound_no) references inbound (inbound_no),
-                                               constraint fk_receipt_product_product_no foreign key (product_no) references product (product_no),
-                                               constraint ck_receipt_product_amount check (amount > 0),
-                                               constraint ck_receipt_product_cargo_space check (cargo_space > 0)
+create table if not exists receipt_product
+(
+    receipt_no int comment '입고번호',
+    inbound_no int comment '발주번호',
+    product_no int not null comment '상품번호',
+    amount int not null comment '수량',
+    cargo_space int not null comment '상품 적재공간',
+    constraint pk_receipt_no_inbound_no primary key(receipt_no, inbound_no),
+    constraint fk_receipt_product_receipt_no foreign key (receipt_no) references receipt_log (receipt_no),
+    constraint fk_receipt_product_inbound_no foreign key (inbound_no) references inbound (inbound_no),
+    constraint fk_receipt_product_product_no foreign key (product_no) references product (product_no),
+    constraint ck_receipt_product_amount check (amount > 0),
+    constraint ck_receipt_product_cargo_space check (cargo_space > 0)
 ) engine=innodb comment '입고상품';
 
-create table if not exists delivery_dispatch_outbound(
-                                            dispatch_no int comment '배차번호',
-                                            outbound_no int comment '수주번호',
-                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no, outbound_no),
-                                            constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                            constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
+create table if not exists delivery_dispatch_outbound
+(
+    dispatch_no int comment '배차번호',
+    outbound_no int comment '수주번호',
+    constraint pk_receipt_no_outbound_no primary key(dispatch_no, outbound_no),
+    constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
+    constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
 ) engine=innodb comment '배차수주';
 
 -- 데이터 삽입
