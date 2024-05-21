@@ -1,5 +1,6 @@
 package wms.menu.menuView;
 
+import wms.menu.controller.MainMenuController;
 import wms.menu.controller.ProductCategoryController;
 import wms.menu.controller.ProductController;
 import wms.menu.model.dto.ManufacturerDto;
@@ -34,6 +35,7 @@ public class ProductView {
      *
      */
     private Scanner sc = new Scanner(System.in);
+    private MainMenuController mainMenuController = new MainMenuController();
     private ProductController productController = new ProductController();
     private ProductCategoryController productCategoryController = new ProductCategoryController();
 
@@ -52,7 +54,7 @@ public class ProductView {
             switch (choice) {
                 case "1" -> showProductManage();
                 case "2" -> productCategoryController.productCategoryManage(showProductCategoryManage());
-                case "0" -> 
+                case "0" ->
                     mainMenuController.mainMenuView();
                 default ->
 //                    if (!choice.equals("1") && !choice.equals("2") && !choice.equals("0"))
