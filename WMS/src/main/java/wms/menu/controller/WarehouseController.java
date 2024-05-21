@@ -9,11 +9,14 @@ import java.util.List;
 public class WarehouseController {
     private WarehouseService warehouseService = new WarehouseService();
 
-    public void findAllSection() {
+    // 창고 구역 조회
+    public List<WarehouseSectionDto> findAllSection() {
         List<WarehouseSectionDto> list = this.warehouseService.findAllSection();
         WarehouseResultView.findAllSection(list);
+        return list;
     }
 
+    // 재고가 이동할 수 있는 창고 목록 출력
     public List<WarehouseSectionDto> findMoveableSection(int categoryNo, int sectionNo, int cargoSpace) {
         List<WarehouseSectionDto> list = this.warehouseService.findMoveableSection(categoryNo, sectionNo);
         list.removeIf(section -> section.getFreeSpace() <= cargoSpace);

@@ -8,6 +8,7 @@ import java.util.List;
 public class WarehouseResultView {
     private static final int COLUMN_WIDTH = 10;
 
+    // 창고 구역 목록 출력
     public static void findAllSection(List<WarehouseSectionDto> list) {
         System.out.println("===== 창고 구역 목록 =====");
         System.out.printf("|%-6s\t|%-10s\t|%-10s\t|%-6s\t|%-6s\t|%-6s\t|%-10s\t|\n", "순번", "구역명", "상품 카테고리", "상품 적재량", "여유 적재량", "적재 공간", "창고 존");
@@ -19,10 +20,12 @@ public class WarehouseResultView {
             String cargoSpace = StringPadding.padLeft(warehouseSectionDto.getCargoSpace(), COLUMN_WIDTH);
             String freeSpace = StringPadding.padLeft(warehouseSectionDto.getFreeSpace(), COLUMN_WIDTH);
             String sectionSpace = StringPadding.padLeft(warehouseSectionDto.getSectionSpace(), COLUMN_WIDTH);
-            System.out.printf("|%-6d\t\t|%s\t|%s\t|%s\t|%s\t|%s\t|\n", order, sectionName, categoryName, cargoSpace, freeSpace, sectionSpace);
+            String zones = StringPadding.padLeft(warehouseSectionDto.getZones(), COLUMN_WIDTH);
+            System.out.printf("|%-6d\t\t|%s\t|%s\t|%s\t|%s\t|%s\t|%s\t\t|\n", order, sectionName, categoryName, cargoSpace, freeSpace, sectionSpace, zones);
         }
     }
 
+    // 재고가 이동할 수 있는 창고 목록 출력
     public static void findMoveableSection(List<WarehouseSectionDto> list) {
         if (list == null || list.isEmpty()) {
             System.out.println("이동 가능한 창고가 없습니다.");

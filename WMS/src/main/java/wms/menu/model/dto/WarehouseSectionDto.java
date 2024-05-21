@@ -45,5 +45,12 @@ public class WarehouseSectionDto {
         return freeSpace;
     }
 
-
+    public String getZones() {
+        StringBuilder zones = new StringBuilder();
+        for (WarehouseSectionSpaceDto sectionSpaceDto : sectionSpaceList) {
+            zones.append(sectionSpaceDto.getZone().getZoneName()).append(", ");
+        }
+        zones.delete(zones.length() - 2, zones.length());
+        return zones.toString();
+    }
 }
