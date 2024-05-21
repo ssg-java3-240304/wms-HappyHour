@@ -84,4 +84,20 @@ public class ProductService {
         sqlSession.close();
         return productDto;
     }
+
+    // 상품 등록 후 inbound_orderable 테이블에 데이터 자동등록
+    public int insertProductToInboundOrderable(int productNo, String orderableStatus) {
+        SqlSession sqlSession = getSqlSession();
+        ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+        try {
+            int result = productMapper.insertProductToInboundOrderable(productNo, orderableStatus);
+            sqlSession.commit();
+            return result;
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw new RuntimeException(e);
+        } finally {
+            sqlSession.close();
+        }
+    }
 }

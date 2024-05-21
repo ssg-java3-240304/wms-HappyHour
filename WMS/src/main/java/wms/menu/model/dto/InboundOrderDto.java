@@ -14,4 +14,6 @@ public class InboundOrderDto {
     private int amount;
     private int cargo_space;
     private int categoryNo;
+    private int inboundNo; // 발주번호
+    private String inboundStatus;// 발주 상태
 }

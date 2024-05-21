@@ -133,11 +133,11 @@ public class ProductDto {
                 "productNo=" + productNo +
                 ", productName='" + productName + '\'' +
                 ", productPrice=" + productPrice +
-                ", productCategory=" + categoryNo +
-                ", manufacturer=" + manufacturerNo +
+                ", categoryNo=" + categoryNo +
+                ", manufacturerNo=" + manufacturerNo +
                 ", alcoholVolume=" + alcoholVolume +
                 ", capacity=" + capacity +
-                ", loadVolume=" + cargoSpace +
+                ", cargoSpace=" + cargoSpace +
                 ", orderableStatus='" + orderableStatus + '\'' +
                 '}';
     }

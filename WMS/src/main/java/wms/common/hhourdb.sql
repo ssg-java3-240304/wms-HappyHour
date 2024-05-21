@@ -166,7 +166,8 @@ create table if not exists inventory (
                                          amount int not null comment '수량',
                                          constraint pk_section_no_product_no primary key(section_no, product_no),
                                          constraint fk_inventory_section_no foreign key (section_no) references warehouse_section (section_no),
-                                         constraint fk_inventory_product_no foreign key (product_no) references product (product_no),
+                                         constraint fk_inventory_product_no foreign key (product_no) references product (product_no)
+                                            on update cascade on delete cascade,
                                          constraint ck_inventory_amount check (amount >= 0)
 ) engine=innodb comment '재고';
 
@@ -322,15 +323,12 @@ insert into inbound_product values (1112, 60007, 369);
 insert into outbound values (null, 2, '2024-05-12 14:38:07', 'completed');
 insert into outbound values (null, 1, '2024-05-14 08:49:12', 'preparing');
 insert into outbound values (null, 1, '2024-05-15 19:21:23', 'canceled');
-insert into outbound values (null, 2, '2024-05-15 19:21:24', 'preparing');
 
 insert into outbound_product values (9990, 60003, 234);
 insert into outbound_product values (9991, 60014, 65);
 insert into outbound_product values (9991, 60018, 20);
 insert into outbound_product values (9992, 60007, 63);
 insert into outbound_product values (9992, 60019, 80);
-insert into outbound_product values (9993, 60003, 10);
-insert into outbound_product values (9993, 60005, 10);
 
 insert into warehouse_section values (null, '소주 창고', 1);
 insert into warehouse_section values (null, '맥주 창고', 2);
