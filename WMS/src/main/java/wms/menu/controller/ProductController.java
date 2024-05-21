@@ -12,9 +12,6 @@ import java.util.List;
 public class ProductController {
     private ProductService productService = new ProductService();
 
-    public void productManage(ProductDto productDto) {
-    }
-
     // 목록 조회
     public List<ProductDto> findAll() {
         List<ProductDto> list = productService.findAll();
