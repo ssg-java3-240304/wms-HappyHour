@@ -1,6 +1,5 @@
 package wms.menu.menuView;
 
-import wms.menu.controller.MainMenuController;
 import wms.menu.controller.ProductCategoryController;
 import wms.menu.controller.ProductController;
 import wms.menu.model.dto.ManufacturerDto;
@@ -37,14 +36,14 @@ public class ProductView {
     private Scanner sc = new Scanner(System.in);
     private ProductController productController = new ProductController();
     private ProductCategoryController productCategoryController = new ProductCategoryController();
-    private MainMenuController mainMenuController=new MainMenuController();
+
     // 상품 관리 화면
     public void productMainMenu() {
         String menu = """
                 =======================
                 1. 상품 관리
                 2. 상품 카테고리 관리
-                0. 메인 메뉴
+                0. 나가기
                 =======================
                 입력 : """;
         while(true) {
