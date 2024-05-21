@@ -22,12 +22,17 @@
                 <property name="username" value="hhdb"/>
                 <property name="password" value="hhdb"/>
           </dataSource>
+
         </environment>
     </environments>
     <mappers>
         <mapper resource="sql/product/product-mapper.xml"/>
         <mapper resource="sql/product/category/product-category-mapper.xml"/>
         <mapper resource="sql/delivery/delivery-mapper.xml"/>
+
+        <mapper resource="sql/inboundorder/inboundorder-mapper.xml"/>
+        <mapper resource="sql/inboundorder/receiptproductlog-mapper.xml"/>
+
 <!--        <mapper resource="sql/inventory/inventory-mapper.xml"/>-->
         <mapper resource="sql/warehouse/warehouse-mapper.xml"/>
         <mapper resource="sql/inoutbound/inbound-mapper.xml"/>
