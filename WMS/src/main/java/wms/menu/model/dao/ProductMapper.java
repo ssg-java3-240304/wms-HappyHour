@@ -25,4 +25,6 @@ public interface ProductMapper {
 
     // 상품 수정
     int updateProduct(ProductDto productDto);
+
+    ProductDto findByProductNo(int productNo);
 }

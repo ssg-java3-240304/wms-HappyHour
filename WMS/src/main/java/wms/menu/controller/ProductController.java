@@ -59,7 +59,13 @@ public class ProductController {
 
     // 원래 상품 정보
     public ProductDto findByNo(int productNo) {
-        return productService.findByNo(productNo);
+        try {
+            ProductDto productByNo = productService.findByNo(productNo);
+            ProductResultView.displayFindByNo(productByNo);
+            return productByNo;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
