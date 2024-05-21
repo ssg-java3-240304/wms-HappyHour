@@ -7,9 +7,9 @@ public class ProductCategoryDto {
     public ProductCategoryDto() {
     }
 
-    public ProductCategoryDto(String categoryName, int categoryNo) {
-        this.categoryName = categoryName;
+    public ProductCategoryDto(int categoryNo, String categoryName) {
         this.categoryNo = categoryNo;
+        this.categoryName = categoryName;
     }
 
     public String getCategoryName() {
