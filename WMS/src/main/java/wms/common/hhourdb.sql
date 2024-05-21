@@ -339,13 +339,25 @@ insert into inbound_product values (1112, 60007, 369);
 
 insert into outbound values (null, 2, '2024-05-12 14:38:07', 'completed');
 insert into outbound values (null, 1, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 2, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 3, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 2, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 3, '2024-05-14 08:49:12', 'preparing');
+insert into outbound values (null, 2, '2024-05-14 08:49:12', 'preparing');
 insert into outbound values (null, 1, '2024-05-15 19:21:23', 'canceled');
 
-insert into outbound_product values (9990, 60003, 234);
-insert into outbound_product values (9991, 60014, 65);
-insert into outbound_product values (9991, 60018, 20);
-insert into outbound_product values (9992, 60007, 63);
-insert into outbound_product values (9992, 60019, 80);
+insert into outbound_product values (9990, 60003, 100);
+insert into outbound_product values (9991, 60001, 30);
+insert into outbound_product values (9991, 60002, 10);
+insert into outbound_product values (9992, 60003, 100);
+insert into outbound_product values (9993, 60005, 100);
+insert into outbound_product values (9993, 60006, 30);
+insert into outbound_product values (9993, 60007, 5);
+insert into outbound_product values (9994, 60009, 100);
+insert into outbound_product values (9995, 60014, 80);
+insert into outbound_product values (9996, 60015, 100);
+insert into outbound_product values (9996, 60020, 50);
+insert into outbound_product values (9992, 60017, 100);
 
 insert into warehouse_section values (null, '소주 창고', 1);
 insert into warehouse_section values (null, '맥주 창고', 2);
@@ -409,10 +421,10 @@ insert into inventory values (502, 60018, 50);
 insert into inventory values (504, 60019, 70);
 insert into inventory values (504, 60020, 380);
 
-insert into delivery_vehicle values ('58누 5999', '배차전', 2000);
-insert into delivery_vehicle values ('12나 8484', '배차전', 2000);
-insert into delivery_vehicle values ('77라 9462', '배차전', 3000);
-insert into delivery_vehicle values ('34마 1549', '배차전', 5000);
+insert into delivery_vehicle values ('58누 5999', '배차전', 500);
+insert into delivery_vehicle values ('12나 8484', '배차전', 500);
+insert into delivery_vehicle values ('77라 9462', '배차전', 500);
+insert into delivery_vehicle values ('34마 1549', '배차전', 500);
 
 insert into delivery_dispatch_log values (null, '58누 5999', '2024-05-14 10:12:15');
 

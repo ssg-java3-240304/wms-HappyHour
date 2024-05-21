@@ -11,10 +11,11 @@ public class DeliveryView {
 
     public void deliveryMenu(){
         String menu = """
+                \n\n======배송======
                 1. 차량 조회
                 2. 배차
                 3. 배차내역
-                4. 출고
+                4. 출고 (미구현)
                 0. 뒤로가기
                 > 메뉴를 선택하세요 : """;
         while(true) {
@@ -24,19 +25,25 @@ public class DeliveryView {
                 case "1" -> findAllVehicles();
                 case "2" -> deploySingleVehicle();
                 case "3" -> findAllDeployList();
-//                case "4" -> deliveryController.shipment();
+                case "4" -> shipment();
                 case "0" -> {return;}
                 default -> System.out.println("잘못 입력하셨습니다.");
             }
         }
     }
+
+    private void shipment() {
+        System.out.println("---출고 기능입니다---");
+        deliveryController.shipment();
+    }
+
     public void findAllVehicles(){
-        System.out.println("모든 차량 조회");
+        System.out.println("\n==모든 차량 조회==");
         deliveryController.findAllVehicles();
     }
 
     public void deploySingleVehicle(){
-        System.out.println("배차 가능한 차량을 조회합니다.....");
+        System.out.println("\n배차 가능한 차량을 조회합니다.....\n");
         try {
             deliveryController.findUsableVehicle();
         }catch (Exception e){
@@ -49,7 +56,7 @@ public class DeliveryView {
     }
 
     public void findAllDeployList(){
-        System.out.println("모든 배차 목록을 조회 합니다");
+        System.out.println("\n\n==모든 배차 목록을 조회 합니다==");
         deliveryController.findAllDeployList();
     }
 

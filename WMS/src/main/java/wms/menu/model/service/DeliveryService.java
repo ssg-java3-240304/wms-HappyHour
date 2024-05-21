@@ -44,7 +44,7 @@ public class DeliveryService {
      * @return
      */
     public DeliveryDto deploySingleVehicle() {
-        int vehicleCapacity = 1000;
+        int vehicleCapacity = 500;
         SqlSession sqlSession = getSqlSession();
         DeliveryMapper deliveryMapper = sqlSession.getMapper(DeliveryMapper.class);
         DeliveryDto deliveryDto = new DeliveryDto();
@@ -54,6 +54,10 @@ public class DeliveryService {
 
 //        수주목록 받아옴
         List<OutboundDtoForDeploy> outboundFullList = deliveryMapper.findAllPendingOutbound(OrderStatus.PREPARING.getStatus());
+        if(outboundFullList.isEmpty()){
+            System.out.println("배차할 수주 물량이 없습니다");
+            return null;
+        }
 //        재고 내에서 추가 가능한 상품을 추가함
         List<OutboundDtoForDeploy> dispatchedOutboundList = payloadOutbound(totalInventoryList, outboundFullList, vehicleCapacity);
         //배차
@@ -66,7 +70,7 @@ public class DeliveryService {
         deliveryDto.setLocalDateTime(LocalDateTime.now());
         //수주 목록 배차됨으로 변경
 
-        for(OutboundDtoForDeploy outbound :outboundFullList){
+        for(OutboundDtoForDeploy outbound :dispatchedOutboundList){
             outbound.setOutboundStatus(OrderStatus.DEPLOYED.getStatus());
             deliveryMapper.updateOutboundStatus(outbound);
         }
@@ -98,7 +102,11 @@ public class DeliveryService {
             //배차 상품 맵을 리스트로 변환
             List<Integer> productKeyList = productAmountMap.keySet().stream().toList();
             //재고 조회
-            List<InventoryDto> inventoryList = deliveryMapper.findInventoryByProductNo(productKeyList);
+            if(productKeyList.isEmpty()) {
+                System.out.println("상차된 재고가 없습니다");
+                return null;
+            }
+                List<InventoryDto> inventoryList = deliveryMapper.findInventoryByProductNo(productKeyList);
             //재고 감소 처리
             List<InventoryDto> dispatchedIvnList = getDispatchedInventory(inventoryList, productAmountMap);
 
@@ -121,6 +129,7 @@ public class DeliveryService {
 
         } catch (RuntimeException e) {
             sqlSession.rollback();
+            e.printStackTrace();
             return null;
         }finally {
             sqlSession.close();
@@ -184,6 +193,13 @@ public class DeliveryService {
         }
         return productMap;
     }
+
+    /**
+     * 출고된 실제 물량을 검사하는 메소드
+     * @param inventoryList
+     * @param productAmountMap
+     * @return
+     */
     private List<InventoryDto> getDispatchedInventory(List<InventoryDto> inventoryList, Map<Integer, Integer> productAmountMap){
         //            각 재고마다 해쉬 맵을 검사하여 해쉬 맵에 값이 있으면 스스로의 재고를 감소
         List<InventoryDto> copiedList = new ArrayList<>();
@@ -234,9 +250,9 @@ public class DeliveryService {
             InventoryDto dispatched = dispatchedIvnList.get(i);
             if (original.getAmount() - dispatched.getAmount() < original.getAmount()){
                 DispatchDto resultDispatch = new DispatchDto();
-                resultDispatch.setDispatchNo(deliveryDto.getDispatchNo());
+//                resultDispatch.setDispatchNo(deliveryDto.getDispatchNo());
                 resultDispatch.setDate(LocalDateTime.now());
-                resultDispatch.setProductName(original.getProductName());
+//                resultDispatch.setProductName(original.getProductName());
                 resultDispatch.setProductNo(original.getProductNo());
                 resultDispatch.setAmount(original.getAmount() - dispatched.getAmount());
                 resultDispatch.setSectionNo(original.getSectionNo());

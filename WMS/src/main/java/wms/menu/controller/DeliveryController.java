@@ -31,4 +31,8 @@ public class DeliveryController {
             List<DeliveryDto> deliveryDtoList = deliveryService.findAllDeployList();
             DeliveryResultView.showAllDeployList(deliveryDtoList);
     }
+
+    public void shipment() {
+
+    }
 }
