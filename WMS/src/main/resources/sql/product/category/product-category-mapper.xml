@@ -5,7 +5,8 @@
 <mapper namespace="wms.menu.model.dao.ProductCategoryMapper">
     <select id="findAll" resultType="productCategoryDto">
         select
-            *
+            category_no,
+            category_name
         from
             category
     </select>
@@ -27,6 +28,14 @@
             category_name = #{categoryName}
         where
             category_no = #{categoryNo}
-
     </update>
+    <select id="findByCategoryNo" resultType="productCategoryDto">
+        select
+            category_no,
+            category_name
+        from
+            category
+        where
+            category_no = #{categoryNo}
+    </select>
 </mapper>

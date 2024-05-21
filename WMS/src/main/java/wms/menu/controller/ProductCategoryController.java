@@ -14,7 +14,9 @@ public class ProductCategoryController {
 
     // 상품 카테고리 목록 조회
     public List<ProductCategoryDto> findAll() {
-        return productCategoryService.findAll();
+        List<ProductCategoryDto> list = productCategoryService.findAll();
+        ProductCategoryResultView.displayCategoryList(list);
+        return list;
     }
 
     // 상품 카테고리 등록
@@ -33,5 +35,14 @@ public class ProductCategoryController {
     public void updateProductCategory(ProductCategoryDto productCategoryDto) {
         int result = productCategoryService.updateProductCategory(productCategoryDto);
         ProductCategoryResultView.displayResult("상품 카테고리 수정", productCategoryDto.getCategoryNo());
+    }
+
+    public void findByCategoryNo(int categoryNo) {
+        try {
+            ProductCategoryDto categoryByNo = productCategoryService.findByCategoryNo(categoryNo);
+            ProductCategoryResultView.displayFindByCategoryNo(categoryByNo);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
