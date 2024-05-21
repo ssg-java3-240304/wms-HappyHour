@@ -31,16 +31,23 @@
 
     <select id="findDispatchLog" resultMap="DeliveryDtoMap">
         select
-            *
+        *
         from
-            delivery_dispatch_log
+        delivery_dispatch_log a join delivery_dispatch_product b on a.dispatch_no = b.dispatch_no;
     </select>
     <resultMap id="DeliveryDtoMap" type="DeliveryDto">
         <id column = "dispatch_no" property="dispatchNo"/>
         <result column="date" property="localDateTime"/>
+
         <association property="vehicleDto" javaType="VehicleDto">
             <id column="registration_no" property="registrationNo"/>
         </association>
+
+<!--        <collection property="outboundList" ofType="OutboundDtoForDeploy">-->
+<!--            <id column="product_no" property="productNo"/>-->
+<!--            &lt;!&ndash;            <id column="outbound_no" property="outboundNo"/>&ndash;&gt;-->
+<!--            <result column="amount" property="amount"/>-->
+<!--        </collection>-->
     </resultMap>
 
 
@@ -80,7 +87,7 @@
         )
     </insert>
 
-    <insert id = "updateDispatchOutbound" useGeneratedKeys="false" parameterType="map">
+    <insert id = "insertDispatchOutbound" useGeneratedKeys="false" parameterType="map">
         insert into
             delivery_dispatch_outbound
         values(
@@ -97,6 +104,50 @@
             registration_no = #{registrationNo}
     </update>
 
+    <insert id = "insertDispatchProduct" useGeneratedKeys="false" parameterType="map">
+        insert into
+            delivery_dispatch_product
+        values(
+            #{dispatchNo}, #{productNo}, #{amount}
+        )
+    </insert>
+
+    <select id="findInventoryByProductNo" parameterType="java.util.List" resultType="InventoryDto">
+        SELECT
+            *
+        FROM
+            inventory
+        WHERE
+            product_no IN
+        <foreach item="key" collection="list" open="(" separator="," close=")">
+            #{key}
+        </foreach>
+    </select>
+
+
+    <update id="dispatchInventory" parameterType="java.util.List">
+        <foreach item="inventory" collection="list" separator=";">
+            UPDATE inventory
+            SET amount = #{inventory.amount}
+            WHERE section_no = #{inventory.sectionNo} and product_no = #{inventory.productNo}
+        </foreach>
+    </update>
+
+
+    <insert id="insertOutboundLog" useGeneratedKeys="true" keyProperty="dispatchNo">
+        INSERT INTO
+            dispatch_log (date)
+        VALUES
+            (#{date})
+    </insert>
+
+
+    <insert id="insertOutboundProductLog">
+        INSERT INTO
+            dispatch_product (dispatch_no, outbound_no, product_no, amount)
+        VALUES
+            (#{dispatchLog.dispatchNo}, #{dispatchLog.outboundNo}, #{dispatchLog.productName}, #{dispatchLog.amount})
+    </insert>
 
 
 </mapper>
