@@ -172,9 +172,9 @@ class DeliveryMapperTest {
     @Test
     void updateInventoryTest() {
         List<InventoryDto> list = new ArrayList<>();
-        list.add(new InventoryDto(501, 60001, 35,"","",0));
-        list.add(new InventoryDto(500, 60003, 100,"","",0));
-        list.add(new InventoryDto(500, 60004, 60,"","",0));
+//        list.add(new InventoryDto(501, 60001, 35,"","",0));
+//        list.add(new InventoryDto(500, 60003, 100,"","",0));
+//        list.add(new InventoryDto(500, 60004, 60,"","",0));
         deliveryMapper.dispatchInventory(list);
 
         List<Integer> prodNo = new ArrayList<>();

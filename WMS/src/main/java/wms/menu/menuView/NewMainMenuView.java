@@ -4,7 +4,7 @@ import wms.menu.controller.MainMenuController;
 
 import java.util.Scanner;
 
-public class MainMenuView {
+public class NewMainMenuView {
     MainMenuController mainMenuController=new MainMenuController();
 
     public void mainView()
