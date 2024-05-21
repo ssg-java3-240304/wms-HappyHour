@@ -1,7 +1,14 @@
 package wms;
 
+
 import wms.menu.menuView.InboundManagementView;
 import wms.menu.menuView.MainMenuView;
+import org.apache.ibatis.session.SqlSession;
+import wms.menu.menuView.InOutboundView;
+import wms.menu.menuView.LoginView;
+
+import static wms.common.MyBatisTemplate.getSqlSession;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -16,6 +23,9 @@ public class Main {
          * 4. resoureces 에서는 MyBatis.xml만 적용 했습니다
          * 5. JDBC, mybatis-config.xml 안에 주소를 확인해주시고 접속을 확인을 해주세요
          */
+
+        // new LoginView().loginView();
+        new InOutboundView().inOutboundView();
 
     }
 }

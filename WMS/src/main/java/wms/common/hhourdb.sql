@@ -4,8 +4,11 @@ drop table if exists receipt_log cascade;
 drop table if exists dispatch_product cascade;
 drop table if exists dispatch_log cascade;
 drop table if exists delivery_dispatch_product cascade;
+drop table if exists delivery_dispatch_outbound cascade;
 drop table if exists delivery_dispatch_log cascade;
+drop table if exists delivery_vehicle cascade;
 drop table if exists inventory cascade;
+drop table if exists warehouse_section_space cascade;
 drop table if exists warehouse_zone cascade;
 drop table if exists warehouse_section cascade;
 drop table if exists inbound_product cascade;
@@ -18,8 +21,6 @@ drop table if exists manufacturer cascade;
 drop table if exists category cascade;
 drop table if exists admin cascade;
 drop table if exists franchise cascade;
-drop table if exists delivery_vehicle cascade;
-drop table if exists delivery_dispatch_outbound cascade;
 
 -- 테이블 생성
 create table if not exists admin (
@@ -127,27 +128,35 @@ create table if not exists outbound_product (
                                                 constraint ck_outbound_product_amount check (amount > 0)
 ) engine=innodb comment '수주_상품';
 
-create table if not exists warehouse_section (
-                                                 section_no int auto_increment comment '구역번호',
-                                                 section_name varchar(10) not null comment '구역이름',
-                                                 category_no int not null comment '카테고리번호',
-                                                 section_space int not null comment '총 구역 적재공간',
-                                                 constraint pk_section_no primary key(section_no),
-                                                 constraint uq_section_name unique(section_name),
-                                                 constraint fk_warehouse_section_category_no foreign key (category_no) references category (category_no),
-                                                 constraint ck_warehouse_section_cargo_space check (section_space > 0)
-) engine=innodb comment '창고구역';
+create table if not exists warehouse_section
+(
+    section_no   int auto_increment comment '구역번호',
+    section_name varchar(10) not null comment '구역이름',
+    category_no  int         not null comment '카테고리번호',
+    constraint pk_section_no primary key (section_no),
+    constraint uq_section_name unique (section_name),
+    constraint fk_warehouse_section_category_no foreign key (category_no) references category (category_no)
+) engine = innodb comment '창고구역';
 
 alter table warehouse_section auto_increment = 500;
 
-create table if not exists warehouse_zone (
-                                              zone_no int auto_increment comment '존번호',
-                                              section_no int not null comment '구역번호',
-                                              zone_space int not null comment '총 존 적재공간',
-                                              constraint pk_zone_no primary key(zone_no),
-                                              constraint fk_warehouse_zone_section_no foreign key (section_no) references warehouse_section (section_no),
-                                              constraint ck_zone_space check (zone_space > 0)
-) engine=innodb comment '창고존';
+create table if not exists warehouse_zone
+(
+    zone_no    int auto_increment comment '존번호',
+    zone_name       varchar(20) not null comment '이름',
+    zone_space int         not null comment '존 적재공간',
+    constraint pk_zone_no primary key (zone_no),
+    constraint uq_zone_name unique (zone_name),
+    constraint ck_zone_space check (zone_space > 0)
+) engine = innodb comment '창고존';
+
+create table if not exists warehouse_section_space
+(
+    section_no int not null comment '구역번호',
+    zone_no    int not null comment '존번호',
+    constraint fk_warehouse_section_no foreign key (section_no) references warehouse_section (section_no),
+    constraint fk_warehouse_zone_no foreign key (zone_no) references warehouse_zone (zone_no)
+) engine = innodb comment '창고구역_적재공간';
 
 alter table warehouse_zone auto_increment = 10;
 
@@ -232,10 +241,10 @@ create table if not exists receipt_product (
 
 create table if not exists delivery_dispatch_outbound(
                                             dispatch_no int comment '배차번호',
-                                            inbound_no int comment '수주번호',
-                                            constraint pk_receipt_no_inbound_no primary key(dispatch_no),
+                                            outbound_no int comment '수주번호',
+                                            constraint pk_receipt_no_outbound_no primary key(dispatch_no),
                                             constraint fk_delivery_dispatch_outbound_dispatch_no foreign key (dispatch_no) references delivery_dispatch_log (dispatch_no),
-                                            constraint delivery_dispatch_outbound_inbound_no foreign key (inbound_no) references inbound (inbound_no)
+                                            constraint delivery_dispatch_outbound_outbound_no foreign key (outbound_no) references outbound (outbound_no)
 ) engine=innodb comment '배차수주';
 
 -- 데이터 삽입
@@ -320,26 +329,34 @@ insert into outbound_product values (9991, 60018, 20);
 insert into outbound_product values (9992, 60007, 63);
 insert into outbound_product values (9992, 60019, 80);
 
-insert into warehouse_section values (null, 'A', 1, 5000);
-insert into warehouse_section values (null, 'B', 2, 1000);
-insert into warehouse_section values (null, 'C', 3, 5000);
-insert into warehouse_section values (null, 'D', 4, 5000);
-insert into warehouse_section values (null, 'E', 5, 5000);
-insert into warehouse_section values (null, 'F', 6, 1000);
+insert into warehouse_section values (null, '소주 창고', 1);
+insert into warehouse_section values (null, '맥주 창고', 2);
+insert into warehouse_section values (null, '위스키 창고', 3);
+insert into warehouse_section values (null, '보드카 창고', 4);
+insert into warehouse_section values (null, '와인 창고', 5);
+insert into warehouse_section values (null, '기타주류 창고', 6);
 
-insert into warehouse_zone values (null, 500, 1000);
-insert into warehouse_zone values (null, 500, 1000);
-insert into warehouse_zone values (null, 500, 1000);
-insert into warehouse_zone values (null, 501, 1000);
-insert into warehouse_zone values (null, 502, 1000);
-insert into warehouse_zone values (null, 502, 1000);
-insert into warehouse_zone values (null, 502, 1000);
-insert into warehouse_zone values (null, 503, 1000);
-insert into warehouse_zone values (null, 503, 1000);
-insert into warehouse_zone values (null, 504, 1000);
-insert into warehouse_zone values (null, 504, 1000);
-insert into warehouse_zone values (null, 504, 1000);
-insert into warehouse_zone values (null, 505, 1000);
+insert into warehouse_zone values (null, 'A', 1000);
+insert into warehouse_zone values (null, 'B', 1000);
+insert into warehouse_zone values (null, 'C', 1000);
+insert into warehouse_zone values (null, 'D', 1000);
+insert into warehouse_zone values (null, 'E', 1000);
+insert into warehouse_zone values (null, 'F', 1000);
+insert into warehouse_zone values (null, 'G', 1000);
+insert into warehouse_zone values (null, 'H', 1000);
+insert into warehouse_zone values (null, 'I', 1000);
+insert into warehouse_zone values (null, 'J', 1000);
+insert into warehouse_zone values (null, 'K', 1000);
+insert into warehouse_zone values (null, 'L', 1000);
+
+insert into warehouse_section_space values (500, 10);
+insert into warehouse_section_space values (500, 11);
+insert into warehouse_section_space values (501, 12);
+insert into warehouse_section_space values (501, 13);
+insert into warehouse_section_space values (502, 14);
+insert into warehouse_section_space values (503, 15);
+insert into warehouse_section_space values (504, 16);
+insert into warehouse_section_space values (505, 17);
 
 insert into inventory values (501, 60001, 135);
 insert into inventory values (501, 60002, 54);
