@@ -1,6 +1,7 @@
 package wms.menu.menuView;
 
 import wms.menu.controller.InboundManagementController;
+import wms.menu.controller.MainMenuController;
 import wms.menu.model.dto.InboundOrderDto;
 import wms.menu.model.dto.InboundOrderListDto;
 import wms.menu.resultview.InboundManagementResultView;
@@ -8,8 +9,9 @@ import wms.menu.resultview.InboundManagementResultView;
 import java.util.List;
 import java.util.Scanner;
 
-public class InboundManagementView {
+public class InboundMenuView {
     InboundManagementController inboundManagementController = new InboundManagementController();
+    MainMenuController mainMenuController=new MainMenuController();
     // 발주 관리 ( 공장에 발주를 넣는다)
 
     /**
@@ -19,15 +21,15 @@ public class InboundManagementView {
      * 없는 물건을 사서 실패하는 경우는 없다
      */
     // 2. 발주 내역
-    public void InboundManagementMenu() {
+    public void InboundMenu() {
         Scanner sc = new Scanner(System.in);
         String choice;
 
         String menu = """
                 ----------------발주---------------- 
-                 1. 발주 신청(+발주 가능 상품 목록 출력)
+                 1. 발주 신청
                  2. 발주 내역
-                 0. 나가기 (뒤로 가기 느낌으로)
+                 0. 메인 메뉴
                  메뉴 번호를 입력 해주세요 : """;
         System.out.printf(menu);
         choice = sc.next();
@@ -41,7 +43,8 @@ public class InboundManagementView {
                 case "2" : inboundManagementController.inboundOrderList();
 
                     // 메인 메뉴로 가기
-                case "0" : return;
+                case "0" : mainMenuController.mainMenuView();
+
                 default:
                     System.out.printf("잘못된 메뉴 번호입니다 : %s\n",choice);
             }
