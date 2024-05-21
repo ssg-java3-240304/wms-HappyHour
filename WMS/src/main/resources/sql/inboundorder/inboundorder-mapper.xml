@@ -49,12 +49,10 @@
     </select>
 
     <select id="findSumAmount" resultType="Integer">
-        select sum(amount)
+        select
+            sum(amount)
         from
-            inventory inven
-            join warehouse_section ws on inven.section_no = ws.section_no
-        join
-            warehouse_zone wz on ws.section_no = wz.section_no
+            inventory inven join warehouse_section ws on inven.section_no = ws.section_no
         where
             category_no = #{categoryNo}
         group by
@@ -68,15 +66,14 @@
     </select>
 
     <select id="findMaxAmount" resultType="Integer">
-        select count(distinct zone_no) * 1000
+        select
+            count(zone_no)*1000
         from
-            inventory inven
-             join warehouse_section ws on inven.section_no = ws.section_no
-        join warehouse_zone wz on ws.section_no = wz.section_no
+            warehouse_section_space join warehouse_section ws on warehouse_section_space.section_no = ws.section_no
         where
-            category_no= #{categoryNo}
+            category_no=#{categoryNo}
         group by
-            ws.section_no
+            ws.section_no limit 1;
 
     </select>
 

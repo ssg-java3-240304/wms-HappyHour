@@ -1,7 +1,6 @@
 package wms.menu.controller;
 
-import wms.menu.menuView.InboundManagementView;
-import wms.menu.menuView.MainMenuView;
+import wms.menu.menuView.InboundMenuView;
 import wms.menu.model.dto.InboundOrderDto;
 import wms.menu.model.dto.InboundOrderListDto;
 import wms.menu.model.dto.ReceiptProductLogDto;
@@ -18,7 +17,7 @@ public class InboundManagementController {
         // 발주 내역 보기
         List<InboundOrderListDto> inboundOrderList = inboundManagementService.inboundOrderList();
         InboundManagementResultView.inboundList(inboundOrderList);
-        new InboundManagementView().InboundManagementMenu();
+        new InboundMenuView().InboundMenu();
         return inboundOrderList;
     }
 
@@ -34,6 +33,7 @@ public class InboundManagementController {
 
     public void inputInbound(InboundOrderDto inboundOrderDto, String status) {
 
+        // 발주 넣을 상품정보, 발주 상태 = completed, pending
         int result;
         ReceiptProductLogDto receiptProductLogDto;
         receiptProductLogDto=inboundManagementService.insertInbound(inboundOrderDto, status);
@@ -46,7 +46,7 @@ public class InboundManagementController {
                 InboundManagementResultView.receiptResultView();
             }
         }
-        new MainMenuView().mainView();
+        new InboundMenuView().InboundMenu();
     }
 
     public List<InboundOrderListDto> inboundOrderAbleList() {

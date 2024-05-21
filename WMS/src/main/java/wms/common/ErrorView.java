@@ -1,11 +1,10 @@
 package wms.common;
 
 import wms.common.error.ErrorCode;
-import wms.menu.menuView.MainMenuView;
+import wms.menu.menuView.InboundMenuView;
 import wms.menu.model.dto.InboundOrderDto;
 
 public class ErrorView {
-
     public static void displayError(ErrorCode errorCode) {
         System.out.println(errorCode);
 
@@ -15,6 +14,6 @@ public class ErrorView {
         System.out.printf("발주 주문에 실패 했습니다 \n발주 개수 : %d, 현재 재고량 = %d, 최대 재고량 = %d\n",
                 inboundOrderDto.getAmount(),
                 nowAmount, maxAmount);
-        new MainMenuView();
+        new InboundMenuView().InboundMenu();
     }
 }

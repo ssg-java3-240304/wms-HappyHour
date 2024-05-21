@@ -1,3 +1,47 @@
+
+
+
+
+use happyhourdb;
+select sum(amount)
+from
+    inventory inven
+        join warehouse_section ws on inven.section_no = ws.section_no
+        join
+    warehouse_zone wz on ws.section_no = wz.zone_no
+where
+    category_no = 3
+group by
+    ws.section_no;
+
+select *
+from warehouse_zone;
+
+select count(zone_no)*1000
+from warehouse_section_space join warehouse_section ws on warehouse_section_space.section_no = ws.section_no
+where category_no=3
+group by ws.section_no limit 1;
+
+
+select sum(amount) 현재재고
+from inventory inven join warehouse_section ws on inven.section_no = ws.section_no
+where category_no = #{cae}
+group by ws.section_no;
+
+select *
+from warehouse_section;
+
+
+
+
+
+
+
+
+
+
+
+
 -- 테이블 삭제
 drop table if exists receipt_product cascade;
 drop table if exists receipt_log cascade;
@@ -335,28 +379,40 @@ insert into warehouse_section values (null, '위스키 창고', 3);
 insert into warehouse_section values (null, '보드카 창고', 4);
 insert into warehouse_section values (null, '와인 창고', 5);
 insert into warehouse_section values (null, '기타주류 창고', 6);
+insert into warehouse_section values (null, '소주 여유 창고', 1);
 
-insert into warehouse_zone values (null, 'A', 1000);
-insert into warehouse_zone values (null, 'B', 1000);
-insert into warehouse_zone values (null, 'C', 1000);
-insert into warehouse_zone values (null, 'D', 1000);
-insert into warehouse_zone values (null, 'E', 1000);
-insert into warehouse_zone values (null, 'F', 1000);
-insert into warehouse_zone values (null, 'G', 1000);
-insert into warehouse_zone values (null, 'H', 1000);
-insert into warehouse_zone values (null, 'I', 1000);
-insert into warehouse_zone values (null, 'J', 1000);
-insert into warehouse_zone values (null, 'K', 1000);
-insert into warehouse_zone values (null, 'L', 1000);
+insert into warehouse_zone values (null, 'A0', 1000);
+insert into warehouse_zone values (null, 'B0', 1000);
+insert into warehouse_zone values (null, 'C0', 1000);
+insert into warehouse_zone values (null, 'D0', 1000);
+insert into warehouse_zone values (null, 'E0', 1000);
+insert into warehouse_zone values (null, 'F0', 1000);
+insert into warehouse_zone values (null, 'A1', 1000);
+insert into warehouse_zone values (null, 'B1', 1000);
+insert into warehouse_zone values (null, 'C1', 1000);
+insert into warehouse_zone values (null, 'D1', 1000);
+insert into warehouse_zone values (null, 'E1', 1000);
+insert into warehouse_zone values (null, 'F1', 1000);
+insert into warehouse_zone values (null, 'A2', 1000);
+insert into warehouse_zone values (null, 'B2', 1000);
+insert into warehouse_zone values (null, 'C2', 1000);
+insert into warehouse_zone values (null, 'D2', 1000);
+insert into warehouse_zone values (null, 'E2', 1000);
+insert into warehouse_zone values (null, 'F2', 1000);
 
 insert into warehouse_section_space values (500, 10);
 insert into warehouse_section_space values (500, 11);
 insert into warehouse_section_space values (501, 12);
 insert into warehouse_section_space values (501, 13);
 insert into warehouse_section_space values (502, 14);
-insert into warehouse_section_space values (503, 15);
-insert into warehouse_section_space values (504, 16);
-insert into warehouse_section_space values (505, 17);
+insert into warehouse_section_space values (502, 15);
+insert into warehouse_section_space values (502, 16);
+insert into warehouse_section_space values (503, 17);
+insert into warehouse_section_space values (504, 18);
+insert into warehouse_section_space values (504, 19);
+insert into warehouse_section_space values (504, 20);
+insert into warehouse_section_space values (505, 21);
+insert into warehouse_section_space values (506, 22);
 
 insert into inventory values (501, 60001, 135);
 insert into inventory values (501, 60002, 54);

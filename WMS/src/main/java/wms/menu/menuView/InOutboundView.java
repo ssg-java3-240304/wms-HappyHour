@@ -1,6 +1,7 @@
 package wms.menu.menuView;
 
 import wms.menu.controller.InOutboundController;
+import wms.menu.controller.MainMenuController;
 
 import java.util.Scanner;
 
@@ -11,6 +12,7 @@ public class InOutboundView {
      * 입고 따로, 출고 따로 볼건지가 잇으면 좋지 않을까 싶습니다
      */
     private InOutboundController inOutboundController = new InOutboundController();
+    private MainMenuController mainMenuController=new MainMenuController();
     private Scanner sc = new Scanner(System.in);
     public void inOutboundView(){
         String menu = """
@@ -18,7 +20,7 @@ public class InOutboundView {
                 1. 입고 내역
                 2. 출고 내역
                 3. 입출고 내역
-                0. 나가기
+                0. 메인 메뉴
                 =================
                 입력 : """;
         while (true) {
@@ -28,7 +30,7 @@ public class InOutboundView {
                 case "1" : inOutboundController.findReceiptLog(); break;
                 case "2" : inOutboundController.findDispatchLog(); break;
                 case "3" : inOutboundController.findReceiptDispatchLog(); break;
-                case "0" : return;
+                case "0" : ;mainMenuController.mainMenuView();
                 default:
                     System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
             }
