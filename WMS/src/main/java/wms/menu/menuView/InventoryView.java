@@ -38,7 +38,10 @@ public class InventoryView {
             String choice = sc.nextLine();
             switch (choice) {
                 case "1" -> sortInventory(); // 재고 조회 기준
-                case "2" -> moveInventory(); // 재고 이동
+                case "2" -> { // 재고 이동
+                    moveInventory();
+                    orderBySectionNo();
+                }
                 case "0" -> { // 나가기
                     return;
                 }

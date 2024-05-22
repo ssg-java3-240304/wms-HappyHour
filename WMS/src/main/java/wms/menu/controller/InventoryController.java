@@ -31,10 +31,8 @@ public class InventoryController {
             int inventoryAmount = inventory.getAmount();
             int fromSectionNo = inventory.getSectionNo();
             result += inventoryService.insertInventory(productNo, moveAmount, toSectionNo);
-            System.out.println(result);
             if (inventoryAmount != moveAmount) {
                 result += inventoryService.updateInventory(productNo, inventoryAmount - moveAmount, fromSectionNo);
-                System.out.println(result);
             } else {
                 result += inventoryService.deleteInventory(productNo, fromSectionNo);
             }
