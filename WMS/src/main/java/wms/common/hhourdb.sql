@@ -79,13 +79,13 @@ create table if not exists product
 
 alter table product auto_increment = 60001;
 
-create table if not exists inbound_orderable
-(
+create table if not exists inbound_orderable (
     product_no int comment '상품번호',
     orderable_status char(1) not null comment '주문가능여부',
     inbound_quantity int not null comment '발주단위',
     constraint pk_product_no primary key(product_no),
-    constraint fk_inbound_orderable_product_no foreign key (product_no) references product (product_no),
+    constraint fk_inbound_orderable_product_no foreign key (product_no) references product (product_no)
+     on update cascade on delete cascade,
     constraint ck_orderable_status check (binary orderable_status in ('Y', 'N')),
     constraint ck_inbound_quantity check (inbound_quantity > 0)
 ) engine=innodb comment '발주 가능 상품';
