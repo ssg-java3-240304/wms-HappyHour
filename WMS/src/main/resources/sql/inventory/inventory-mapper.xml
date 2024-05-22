@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.InventoryMapper">
+    <resultMap id="InventoryDtoMap" type="InventoryDto">
+        <id column="section_no" property="sectionNo"/>
+        <id column="product_no" property="productNo"/>
+        <result column="amount" property="amount"/>
+        <association property="warehouseSection" javaType="WarehouseSectionDto">
+            <id column="section_no" property="sectionNo"/>
+            <result column="section_name" property="sectionName"/>
+            <result column="category_no" property="categoryNo"/>
+        </association>
+        <association property="product" javaType="ProductDto">
+            <id column="product_no" property="productNo"/>
+            <result column="product_name" property="productName"/>
+            <result column="product_price" property="productPrice"/>
+            <result column="category_no" property="categoryNo"/>
+            <result column="manufacturer_no" property="manufacturerNo"/>
+            <result column="alcohol_volume" property="alcoholVolume"/>
+            <result column="capacity" property="capacity"/>
+            <result column="cargo_space" property="cargoSpace"/>
+            <result column="orderable_status" property="orderableStatus"/>
+        </association>
+    </resultMap>
+    <!-- 쿼리문 -->
+    <!-- 구역 기준 정렬 -->
+    <select id="orderBySectionNo" resultMap="InventoryDtoMap">
+        select *
+        from inventory i
+                left join warehouse_section ws using (section_no)
+                left join product p using (product_no)
+        order by section_no
+    </select>
+    <!-- 상품 기준 정렬 -->
+    <select id="orderByProductName"  resultMap="InventoryDtoMap">
+        select *
+        from inventory i
+                left join warehouse_section ws using (section_no)
+                left join product p using (product_no)
+        order by product_name
+    </select>
+    <!-- 재고 삽입 -->
+    <insert id="insertInventory">
+        insert into inventory
+        values (#{sectionNo}, #{productNo}, #{amount})
+        on duplicate key update
+            amount = amount + values (amount)
+    </insert>
+    <!-- 재고 업데이트 -->
+    <update id="updateInventory">
+        update inventory
+        set amount = #{amount}
+        where section_no = #{sectionNo}
+          and product_no = #{productNo}
+    </update>
+    <!-- 재고 삭제 -->
+    <delete id="deleteInventory">
+        delete from inventory
+        where section_no = #{sectionNo}
+          and product_no = #{productNo}
+    </delete>
+</mapper>

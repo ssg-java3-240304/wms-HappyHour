@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wms.menu.model.dao.DeliveryMapper">
+    <select id="findAllVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+    </select>
+    <select id="findUsableVehicles" resultType="VehicleDto">
+        select
+            *
+        from
+            delivery_vehicle
+        where
+            vehicle_status = #{status}
+    </select>
+
+    <select id="findAllInventory" resultType="InventoryForDeploy">
+        select
+            product_no,
+            sum(amount) as amount
+        from
+            inventory
+        group by
+            product_no;
+    </select>
+
+    <select id="findAllPendingOutbound" resultMap="OutboundDtoForDeployMap">
+        select
+            *,
+            sum(b.amount * c.cargo_space) over(partition by b.outbound_no) as cargoSpace
+
+        from
+            outbound a join outbound_product b on a.outbound_no = b.outbound_no
+            join product c on b.product_no = c.product_no
+        where
+            outbound_status = #{status}
+    </select>
+
+    <resultMap id="OutboundDtoForDeployMap" type="OutboundDtoForDeploy">
+        <!-- id: PK 컬럼 매핑 -->
+        <id column="outbound_no" property="outboundNo"/>
+        <!-- result: 그 외 컬럼 매핑 -->
+        <result column="franchise_no" property="franchiseNo"/>
+        <result column="date" property="date"/>
+        <result column="outbound_status" property="outboundStatus"/>
+        <result column="cargoSpace" property="cargoSpace"/>
+        <!-- 1:N 관계의 테이블 행 매핑 -->
+        <collection property="productList" ofType="ProductDtoForDeploy">
+            <id column="product_no" property="productNo"/>
+<!--            <id column="outbound_no" property="outboundNo"/>-->
+            <result column="amount" property="amount"/>
+        </collection>
+    </resultMap>
+
+    <insert id = "insertDispatchLog" useGeneratedKeys="true" keyProperty="dispatchNo">
+        insert into
+        delivery_dispatch_log
+        values(
+        null, #{vehicleDto.registrationNo}, #{localDateTime}
+        )
+    </insert>
+
+    <insert id = "insertDispatchOutbound" useGeneratedKeys="false" parameterType="map">
+        insert into
+            delivery_dispatch_outbound
+        values(
+            #{dispatchNo}, #{outboundNo}
+        )
+    </insert>
+
+    <update id="updateVehicleStatus" parameterType="map">
+        update
+            delivery_vehicle
+        set
+            vehicle_status = #{vehicleStatus}
+        where
+            registration_no = #{registrationNo}
+    </update>
+
+    <insert id = "insertDispatchProduct" useGeneratedKeys="false" parameterType="map">
+        insert into
+            delivery_dispatch_product
+        values(
+            #{dispatchNo}, #{productNo}, #{amount}
+        )
+    </insert>
+
+    <select id="findInventoryByProductNo" parameterType="java.util.List" resultType="InventoryDto">
+        SELECT
+            *
+        FROM
+            inventory
+        WHERE
+            product_no IN
+        <foreach item="key" collection="list" open="(" separator="," close=")">
+            #{key}
+        </foreach>
+    </select>
+
+
+    <update id="dispatchInventory" parameterType="java.util.List">
+        <foreach item="inventory" collection="list" separator=";">
+            UPDATE inventory
+            SET amount = #{inventory.amount}
+            WHERE section_no = #{inventory.sectionNo} and product_no = #{inventory.productNo}
+        </foreach>
+    </update>
+
+
+    <update id="updateOutboundStatus">
+        update
+            outbound
+        set
+            outbound_status = #{outboundStatus}
+        where
+            outbound_no = #{outboundNo}
+    </update>
+
+
+    <insert id="insertOutboundLog" useGeneratedKeys="true" keyProperty="dispatchNo">
+        INSERT INTO
+            dispatch_log (date)
+        VALUES
+            (#{date})
+    </insert>
+
+
+    <insert id="insertOutboundProductLog">
+        INSERT INTO
+            dispatch_product (dispatch_no, product_no, amount)
+        VALUES
+            (#{dispatchNo}, #{productNo}, #{amount})
+    </insert>
+
+    <select id="findAllDeploy" resultMap="DeliveryDtoMap2">
+        select
+            *
+        from
+            delivery_dispatch_log a join delivery_dispatch_outbound b
+                on a.dispatch_no = b.dispatch_no;
+    </select>
+    <resultMap id="DeliveryDtoMap2" type="DeliveryDto">
+        <id column = "dispatch_no" property="dispatchNo"/>
+        <result column="date" property="localDateTime"/>
+
+        <association property="vehicleDto" javaType="VehicleDto">
+            <id column="registration_no" property="registrationNo"/>
+        </association>
+
+        <collection property="outboundList" ofType="OutboundDtoForDeploy">
+            <id column="outbound_no" property="outboundNo"/>
+        </collection>
+    </resultMap>
+
+</mapper>
